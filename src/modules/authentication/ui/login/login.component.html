@@ -1,0 +1,49 @@
+<div
+    *ngIf="!Loading"
+    [formGroup]="Form"
+    class="login-form"
+>
+    <mat-form-field appearance="fill">
+        <mat-label>
+            Введите логин
+        </mat-label>
+        <input
+            matInput
+            formControlName="userName"
+        >
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+        <mat-label>
+            Введите пароль
+        </mat-label>
+        <input
+            matInput
+            formControlName="password"
+            [type]="HidePassword ? 'password' : 'text'"
+        >
+        <button
+            mat-icon-button
+            matSuffix
+            (click)="HidePassword = !HidePassword"
+        >
+            <mat-icon>
+                {{ HidePassword ? 'visibility_off' : 'visibility' }}
+            </mat-icon>
+        </button>
+    </mat-form-field>
+
+    <button
+        mat-stroked-button
+        [disabled]="!Form.valid"
+        (click)="login()"
+    >
+        Войти
+    </button>
+</div>
+
+<div
+    *ngIf="Loading"
+>
+    <mat-spinner></mat-spinner>
+</div>

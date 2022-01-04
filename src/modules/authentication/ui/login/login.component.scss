@@ -1,0 +1,15 @@
+:host {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+
+    & > * {
+        margin-bottom: 20px;
+    }
+}

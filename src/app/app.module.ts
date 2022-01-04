@@ -1,18 +1,23 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common'; 
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { FinancialTransactionFilterModule } from 'src/modules/financial-transaction-filter/bootstrap/financial-transaction-filter.module';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent
+    ],
+    imports: [
+        CommonModule,
+        BrowserModule,
+        HttpClientModule,
+        AppRoutingModule,
+        FinancialTransactionFilterModule
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,0 +1,1 @@
+export { FinancialTransactionsFacade } from './financial-transactions.facade';

@@ -2,11 +2,12 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
+import { AuthGuard } from './auth.guard';
 
 const routes: Routes = [
     {
         path: '',
-        redirectTo: '/login',
+        redirectTo: '/financial-transactions',
         pathMatch: 'full'
     },
     {
@@ -16,6 +17,11 @@ const routes: Routes = [
             {
                 path: 'login',
                 loadChildren: () => import('../modules/authentication/bootstrap/authentication.module').then(m => m.AuthenticationModule)
+            },
+            {
+                canActivate: [AuthGuard],
+                path: 'financial-transactions',
+                loadChildren: () => import('../modules/financial-transactions/bootstrap/financial-transactions.module').then(m => m.FinancialTransactionsModule)
             }
         ]
     }

@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { AuthenticationFacade } from '../../core';
 
@@ -32,11 +33,15 @@ export class LoginComponent implements OnInit {
         this.loading = value;
     }
 
-    constructor(private readonly facade: AuthenticationFacade, public fb: FormBuilder) {
-        this.form = this.fb.group({
+    constructor(
+        private readonly facade: AuthenticationFacade,
+        private readonly formBuilder: FormBuilder,
+        private readonly router: Router
+    ) {
+        this.form = this.formBuilder.group({
             userName: ['', Validators.required],
             password: ['', Validators.required]
-          });
+        });
     }
 
     public ngOnInit(): void {
@@ -46,8 +51,9 @@ export class LoginComponent implements OnInit {
     public login(): void {
         this.facade.login(this.Form.value.userName, this.Form.value.password)
             .subscribe({
-                next: res => {
-                    console.log(res);
+                next: (accessToken: string): void => {
+                    localStorage.setItem('accessToken', accessToken);
+                    this.router.navigate(['/financial-transactions']);
                 },
                 error: err => console.error(err.error)
             });

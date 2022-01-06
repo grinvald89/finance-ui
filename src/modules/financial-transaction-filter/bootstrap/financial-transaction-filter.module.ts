@@ -16,6 +16,7 @@ import { FullnamePipe } from '../ui/financial-transaction-filter/users/fullname.
 import { DatesComponent } from '../ui/financial-transaction-filter/dates/dates.component';
 import { TransactionCategoriesComponent } from '../ui/financial-transaction-filter/transaction-categories/transaction-categories.component';
 import { TransactionCategoryOptionsComponent } from '../ui/financial-transaction-filter/transaction-category-options/transaction-category-options.component';
+import { TransactionSubcategoriesComponent } from '../ui/financial-transaction-filter/transaction-subcategories/transaction-subcategories.component';
 
 @NgModule({
     imports: [
@@ -36,7 +37,8 @@ import { TransactionCategoryOptionsComponent } from '../ui/financial-transaction
         FullnamePipe,
         DatesComponent,
         TransactionCategoriesComponent,
-        TransactionCategoryOptionsComponent
+        TransactionCategoryOptionsComponent,
+        TransactionSubcategoriesComponent
     ],
     exports: [FinancialTransactionFilterComponent],
     providers: [

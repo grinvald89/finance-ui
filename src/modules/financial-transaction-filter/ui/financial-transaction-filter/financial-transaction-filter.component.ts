@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, OnInit, ChangeDetectorRef } from '@
 import { FormControl } from '@angular/forms';
 import * as _ from 'lodash';
 
-import { TransactionCategory, TransactionCategoryOption, TransactionStatus, TransactionType, User } from 'src/models';
+import { TransactionCategory, TransactionCategoryOption, TransactionStatus, TransactionSubCategory, TransactionType, User } from 'src/models';
 import { FinancialTransactionFilterFacade, Period } from '../../core';
 
 interface Pokemon {
@@ -23,9 +23,13 @@ interface PokemonGroup {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FinancialTransactionFilterComponent implements OnInit {
+    // (ChangeSelectedTransactionSubCategories)="onChangedSelectedTransactionSubCategories($event)"
+    // [SubCategories]="TransactionSubCategories"
+
     private transactionCategories: TransactionCategory[] = [];
     private transactionCategoryOptions: TransactionCategoryOption[] = [];
     private transactionStatuses: TransactionStatus[] = [];
+    private transactionSubCategories: TransactionSubCategory[] = [];
     private transactionTypes: TransactionType[] = [];
     private users: User[] = [];
 
@@ -50,6 +54,14 @@ export class FinancialTransactionFilterComponent implements OnInit {
     }
     set TransactionStatuses(value: TransactionStatus[]) {
         this.transactionStatuses = value;
+        this.changeDetector.detectChanges();
+    }
+
+    get TransactionSubCategories(): TransactionSubCategory[] {
+        return this.transactionSubCategories;
+    }
+    set TransactionSubCategories(value: TransactionSubCategory[]) {
+        this.transactionSubCategories = value;
         this.changeDetector.detectChanges();
     }
 
@@ -87,6 +99,10 @@ export class FinancialTransactionFilterComponent implements OnInit {
             .subscribe((transactionStatuses: TransactionStatus[]): TransactionStatus[] =>
                 this.TransactionStatuses = transactionStatuses);
 
+        this.facade.getTransactionSubCategories()
+            .subscribe((transactionSubCategories: TransactionSubCategory[]): TransactionSubCategory[] =>
+                this.TransactionSubCategories = transactionSubCategories);
+
         this.facade.getTransactionTypes()
             .subscribe((transactionTypes: TransactionType[]): TransactionType[] =>
                 this.TransactionTypes = transactionTypes);
@@ -106,6 +122,10 @@ export class FinancialTransactionFilterComponent implements OnInit {
 
     public onChangedSelectedTransactionStatuses(selectedTransactionStatuses: TransactionStatus[]): void {
         console.log(selectedTransactionStatuses);
+    }
+
+    public onChangedSelectedTransactionSubCategories(selectedTransactionSubCategories: TransactionSubCategory[]): void {
+        console.log(selectedTransactionSubCategories);
     }
 
     public onChangedSelectedTransactionTypes(selectedTransactionTypes: TransactionType[]): void {

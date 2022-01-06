@@ -37,6 +37,13 @@
             [CategoryOptions]="TransactionCategoryOptions"
         ></transaction-category-options>
     </div>
+
+    <div class="filter-container">
+        <transaction-subcategories
+            (ChangeSelectedTransactionSubCategories)="onChangedSelectedTransactionSubCategories($event)"
+            [SubCategories]="TransactionSubCategories"
+        ></transaction-subcategories>
+    </div>
 </div>
 
 

@@ -1,0 +1,11 @@
+.filters {
+    display: flex;
+}
+
+.filter-container {
+    margin-left: 20px;
+
+    &:first-child {
+        margin-left: 0;
+    }
+}

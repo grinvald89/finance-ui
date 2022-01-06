@@ -1,0 +1,22 @@
+<div
+    [formGroup]="Form"
+    class="form"
+>
+    <mat-form-field appearance="fill">
+        <mat-label>
+            Статус операции
+        </mat-label>
+        <mat-select
+            multiple
+            formControlName="statuses"
+            [compareWith]="compareTypes"
+        >
+            <mat-option
+                *ngFor="let status of Statuses"
+                [value]="status"
+            >
+                {{ status.Name }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>

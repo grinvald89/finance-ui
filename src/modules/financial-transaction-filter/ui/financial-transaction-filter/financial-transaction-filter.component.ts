@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, OnInit, ChangeDetectorRef } from '@
 import { FormControl } from '@angular/forms';
 import * as _ from 'lodash';
 
-import { TransactionType } from 'src/models';
+import { TransactionStatus, TransactionType } from 'src/models';
 import { FinancialTransactionFilterFacade } from '../../core';
 
 interface Pokemon {
@@ -23,7 +23,16 @@ interface PokemonGroup {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FinancialTransactionFilterComponent implements OnInit {
+    private transactionStatuses: TransactionStatus[] = [];
     private transactionTypes: TransactionType[] = [];
+
+    get TransactionStatuses(): TransactionStatus[] {
+        return this.transactionStatuses;
+    }
+    set TransactionStatuses(value: TransactionStatus[]) {
+        this.transactionStatuses = value;
+        this.changeDetector.detectChanges();
+    }
 
     get TransactionTypes(): TransactionType[] {
         return this.transactionTypes;
@@ -39,15 +48,22 @@ export class FinancialTransactionFilterComponent implements OnInit {
     ) { }
 
     public ngOnInit(): void {
+        this.facade.getTransactionStatuses()
+            .subscribe((transactionStatuses: TransactionStatus[]): TransactionStatus[] =>
+                this.TransactionStatuses = transactionStatuses);
+
         this.facade.getTransactionTypes()
             .subscribe((transactionTypes: TransactionType[]): TransactionType[] =>
                 this.TransactionTypes = transactionTypes);
     }
 
+    public onChangedSelectedTransactionStatuses(selectedTransactionStatuses: TransactionStatus[]): void {
+        console.log(selectedTransactionStatuses);
+    }
+
     public onChangedSelectedTransactionTypes(selectedTransactionTypes: TransactionType[]): void {
         console.log(selectedTransactionTypes);
     }
-
 
     pokemonControl = new FormControl();
     pokemonGroups: PokemonGroup[] = [

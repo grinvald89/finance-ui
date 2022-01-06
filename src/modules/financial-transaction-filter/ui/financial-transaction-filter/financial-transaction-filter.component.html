@@ -1,7 +1,20 @@
-<transaction-types
-    (changeSelectedTransactionTypes)="onChangedSelectedTransactionTypes($event)"
-    [Types]="TransactionTypes"
-></transaction-types>
+<div class="filters">
+    <div class="filter-container">
+        <transaction-types
+            (changeSelectedTransactionTypes)="onChangedSelectedTransactionTypes($event)"
+            [Types]="TransactionTypes"
+        ></transaction-types>
+    </div>
+
+    <div class="filter-container">
+        <transaction-statuses
+            (changeSelectedTransactionStatuses)="onChangedSelectedTransactionStatuses($event)"
+            [Statuses]="TransactionStatuses"
+        ></transaction-statuses>
+    </div>
+</div>
+
+
 
 
 

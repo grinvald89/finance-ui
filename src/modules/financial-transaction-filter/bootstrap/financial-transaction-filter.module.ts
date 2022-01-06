@@ -7,6 +7,7 @@ import { MatSelectModule } from '@angular/material/select';
 
 import { FinancialTransactionFilterComponent } from '../ui/financial-transaction-filter/financial-transaction-filter.component';
 import { TransactionTypesComponent } from '../ui/financial-transaction-filter/transaction-types/transaction-types.component';
+import { TransactionStatusesComponent } from '../ui/financial-transaction-filter/transaction-statuses/transaction-statuses.component';
 
 @NgModule({
     imports: [
@@ -19,7 +20,8 @@ import { TransactionTypesComponent } from '../ui/financial-transaction-filter/tr
     ],
     declarations: [
         FinancialTransactionFilterComponent,
-        TransactionTypesComponent
+        TransactionTypesComponent,
+        TransactionStatusesComponent
     ],
     exports: [FinancialTransactionFilterComponent]
 })

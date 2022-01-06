@@ -23,6 +23,13 @@
     <div class="filter-container">
         <dates (ChangeSelectedPeriod)="onChangedSelectedPeriod($event)"></dates>
     </div>
+
+    <div class="filter-container">
+        <transaction-categories
+            (ChangeSelectedTransactionCategories)="onChangedSelectedTransactionCategories($event)"
+            [Categories]="TransactionCategories"
+        ></transaction-categories>
+    </div>
 </div>
 
 

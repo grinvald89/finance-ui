@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, OnInit, ChangeDetectorRef } from '@
 import { FormControl } from '@angular/forms';
 import * as _ from 'lodash';
 
-import { TransactionStatus, TransactionType, User } from 'src/models';
+import { TransactionCategory, TransactionStatus, TransactionType, User } from 'src/models';
 import { FinancialTransactionFilterFacade, Period } from '../../core';
 
 interface Pokemon {
@@ -23,9 +23,18 @@ interface PokemonGroup {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FinancialTransactionFilterComponent implements OnInit {
+    private transactionCategories: TransactionCategory[] = [];
     private transactionStatuses: TransactionStatus[] = [];
     private transactionTypes: TransactionType[] = [];
     private users: User[] = [];
+
+    get TransactionCategories(): TransactionCategory[] {
+        return this.transactionCategories;
+    }
+    set TransactionCategories(value: TransactionCategory[]) {
+        this.transactionCategories = value;
+        this.changeDetector.detectChanges();
+    }
 
     get TransactionStatuses(): TransactionStatus[] {
         return this.transactionStatuses;
@@ -57,6 +66,10 @@ export class FinancialTransactionFilterComponent implements OnInit {
     ) { }
 
     public ngOnInit(): void {
+        this.facade.getTransactionCategories()
+            .subscribe((transactionCategories: TransactionCategory[]): TransactionCategory[] =>
+                this.TransactionCategories = transactionCategories);
+
         this.facade.getTransactionStatuses()
             .subscribe((transactionStatuses: TransactionStatus[]): TransactionStatus[] =>
                 this.TransactionStatuses = transactionStatuses);
@@ -68,6 +81,10 @@ export class FinancialTransactionFilterComponent implements OnInit {
         this.facade.getUsers()
             .subscribe((users: User[]): User[] =>
                 this.Users = users);
+    }
+
+    public onChangedSelectedTransactionCategories(selectedTransactionCategories: TransactionCategory[]): void {
+        console.log(selectedTransactionCategories);
     }
 
     public onChangedSelectedTransactionStatuses(selectedTransactionStatuses: TransactionStatus[]): void {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { TransactionStatus, TransactionType, User } from 'src/models';
+import { TransactionCategory, TransactionStatus, TransactionType, User } from 'src/models';
 import { FinancialTransactionFilterRepository } from '../data';
 
 @Injectable({
@@ -9,6 +9,10 @@ import { FinancialTransactionFilterRepository } from '../data';
 })
 export class FinancialTransactionFilterFacade {
     constructor(private readonly filterRepository: FinancialTransactionFilterRepository) { }
+
+    public getTransactionCategories(): Observable<TransactionCategory[]> {
+        return this.filterRepository.getTransactionCategories();
+    }
 
     public getTransactionStatuses(): Observable<TransactionStatus[]> {
         return this.filterRepository.getTransactionStatuses();

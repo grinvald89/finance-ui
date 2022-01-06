@@ -14,6 +14,7 @@ import { TransactionStatusesComponent } from '../ui/financial-transaction-filter
 import { UsersComponent } from '../ui/financial-transaction-filter/users/users.component';
 import { FullnamePipe } from '../ui/financial-transaction-filter/users/fullname.pipe';
 import { DatesComponent } from '../ui/financial-transaction-filter/dates/dates.component';
+import { TransactionCategoriesComponent } from '../ui/financial-transaction-filter/transaction-categories/transaction-categories.component';
 
 @NgModule({
     imports: [
@@ -32,7 +33,8 @@ import { DatesComponent } from '../ui/financial-transaction-filter/dates/dates.c
         TransactionStatusesComponent,
         UsersComponent,
         FullnamePipe,
-        DatesComponent
+        DatesComponent,
+        TransactionCategoriesComponent
     ],
     exports: [FinancialTransactionFilterComponent],
     providers: [

@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, OnInit, ChangeDetectorRef } from '@
 import { FormControl } from '@angular/forms';
 import * as _ from 'lodash';
 
-import { TransactionCategory, TransactionStatus, TransactionType, User } from 'src/models';
+import { TransactionCategory, TransactionCategoryOption, TransactionStatus, TransactionType, User } from 'src/models';
 import { FinancialTransactionFilterFacade, Period } from '../../core';
 
 interface Pokemon {
@@ -24,6 +24,7 @@ interface PokemonGroup {
 })
 export class FinancialTransactionFilterComponent implements OnInit {
     private transactionCategories: TransactionCategory[] = [];
+    private transactionCategoryOptions: TransactionCategoryOption[] = [];
     private transactionStatuses: TransactionStatus[] = [];
     private transactionTypes: TransactionType[] = [];
     private users: User[] = [];
@@ -33,6 +34,14 @@ export class FinancialTransactionFilterComponent implements OnInit {
     }
     set TransactionCategories(value: TransactionCategory[]) {
         this.transactionCategories = value;
+        this.changeDetector.detectChanges();
+    }
+
+    get TransactionCategoryOptions(): TransactionCategoryOption[] {
+        return this.transactionCategoryOptions;
+    }
+    set TransactionCategoryOptions(value: TransactionCategoryOption[]) {
+        this.transactionCategoryOptions = value;
         this.changeDetector.detectChanges();
     }
 
@@ -70,6 +79,10 @@ export class FinancialTransactionFilterComponent implements OnInit {
             .subscribe((transactionCategories: TransactionCategory[]): TransactionCategory[] =>
                 this.TransactionCategories = transactionCategories);
 
+        this.facade.getTransactionCategoryOptions()
+            .subscribe((transactionCategoryOptions: TransactionCategoryOption[]): TransactionCategoryOption[] =>
+                this.TransactionCategoryOptions = transactionCategoryOptions);
+
         this.facade.getTransactionStatuses()
             .subscribe((transactionStatuses: TransactionStatus[]): TransactionStatus[] =>
                 this.TransactionStatuses = transactionStatuses);
@@ -85,6 +98,10 @@ export class FinancialTransactionFilterComponent implements OnInit {
 
     public onChangedSelectedTransactionCategories(selectedTransactionCategories: TransactionCategory[]): void {
         console.log(selectedTransactionCategories);
+    }
+
+    public onChangedSelectedTransactionCategoryOptions(selectedTransactionCategoryOptions: TransactionCategoryOption[]): void {
+        console.log(selectedTransactionCategoryOptions);
     }
 
     public onChangedSelectedTransactionStatuses(selectedTransactionStatuses: TransactionStatus[]): void {

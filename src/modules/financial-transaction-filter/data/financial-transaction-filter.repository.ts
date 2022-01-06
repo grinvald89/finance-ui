@@ -3,7 +3,18 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import * as _ from 'lodash';
 
-import { ITransactionCategory, ITransactionStatus, ITransactionType, IUser, TransactionCategory, TransactionStatus, TransactionType, User } from 'src/models';
+import {
+    ITransactionCategory,
+    ITransactionCategoryOption,
+    ITransactionStatus,
+    ITransactionType,
+    IUser,
+    TransactionCategory,
+    TransactionCategoryOption,
+    TransactionStatus,
+    TransactionType,
+    User
+} from 'src/models';
 
 @Injectable({
     providedIn: 'root'
@@ -25,6 +36,23 @@ export class FinancialTransactionFilterRepository {
             .pipe(
                 map((transactionCategories: ITransactionCategory[]): TransactionCategory[] =>
                     _.map(transactionCategories, (item) => new TransactionCategory(item)))
+            );
+    }
+
+    public getTransactionCategoryOptions(): Observable<TransactionCategoryOption[]> {
+        const headers: HttpHeaders = new HttpHeaders({
+            'Content-Type': 'application/json'
+        });
+
+        return this.http.get<ITransactionCategoryOption[]>(
+            'https://localhost:7062/api/transaction-category-options',
+            {
+                headers
+            }
+        )
+            .pipe(
+                map((transactionCategoryOptions: ITransactionCategoryOption[]): TransactionCategoryOption[] =>
+                    _.map(transactionCategoryOptions, (item) => new TransactionCategoryOption(item)))
             );
     }
 

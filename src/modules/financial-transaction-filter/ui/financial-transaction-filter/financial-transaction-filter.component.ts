@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, OnInit, ChangeDetectorRef } from '@
 import { FormControl } from '@angular/forms';
 import * as _ from 'lodash';
 
-import { TransactionStatus, TransactionType } from 'src/models';
+import { TransactionStatus, TransactionType, User } from 'src/models';
 import { FinancialTransactionFilterFacade } from '../../core';
 
 interface Pokemon {
@@ -25,6 +25,7 @@ interface PokemonGroup {
 export class FinancialTransactionFilterComponent implements OnInit {
     private transactionStatuses: TransactionStatus[] = [];
     private transactionTypes: TransactionType[] = [];
+    private users: User[] = [];
 
     get TransactionStatuses(): TransactionStatus[] {
         return this.transactionStatuses;
@@ -42,6 +43,14 @@ export class FinancialTransactionFilterComponent implements OnInit {
         this.changeDetector.detectChanges();
     }
 
+    get Users(): User[] {
+        return this.users;
+    }
+    set Users(value: User[]) {
+        this.users = value;
+        this.changeDetector.detectChanges();
+    }
+
     constructor(
         private readonly facade: FinancialTransactionFilterFacade,
         private readonly changeDetector: ChangeDetectorRef
@@ -55,6 +64,10 @@ export class FinancialTransactionFilterComponent implements OnInit {
         this.facade.getTransactionTypes()
             .subscribe((transactionTypes: TransactionType[]): TransactionType[] =>
                 this.TransactionTypes = transactionTypes);
+
+        this.facade.getUsers()
+            .subscribe((users: User[]): User[] =>
+                this.Users = users);
     }
 
     public onChangedSelectedTransactionStatuses(selectedTransactionStatuses: TransactionStatus[]): void {
@@ -63,6 +76,10 @@ export class FinancialTransactionFilterComponent implements OnInit {
 
     public onChangedSelectedTransactionTypes(selectedTransactionTypes: TransactionType[]): void {
         console.log(selectedTransactionTypes);
+    }
+
+    public onChangedSelectedUsers(selectedUsers: User[]): void {
+        console.log(selectedUsers);
     }
 
     pokemonControl = new FormControl();

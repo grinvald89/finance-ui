@@ -8,6 +8,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { FinancialTransactionFilterComponent } from '../ui/financial-transaction-filter/financial-transaction-filter.component';
 import { TransactionTypesComponent } from '../ui/financial-transaction-filter/transaction-types/transaction-types.component';
 import { TransactionStatusesComponent } from '../ui/financial-transaction-filter/transaction-statuses/transaction-statuses.component';
+import { UsersComponent } from '../ui/financial-transaction-filter/users/users.component';
+import { FullnamePipe } from '../ui/financial-transaction-filter/users/fullname.pipe';
 
 @NgModule({
     imports: [
@@ -21,7 +23,9 @@ import { TransactionStatusesComponent } from '../ui/financial-transaction-filter
     declarations: [
         FinancialTransactionFilterComponent,
         TransactionTypesComponent,
-        TransactionStatusesComponent
+        TransactionStatusesComponent,
+        UsersComponent,
+        FullnamePipe
     ],
     exports: [FinancialTransactionFilterComponent]
 })

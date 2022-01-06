@@ -12,6 +12,13 @@
             [Statuses]="TransactionStatuses"
         ></transaction-statuses>
     </div>
+
+    <div class="filter-container">
+        <users
+            (changeSelectedUsers)="onChangedSelectedUsers($event)"
+            [Users]="Users"
+        ></users>
+    </div>
 </div>
 
 

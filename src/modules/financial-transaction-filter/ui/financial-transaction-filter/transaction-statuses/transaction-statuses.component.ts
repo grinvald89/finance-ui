@@ -19,7 +19,7 @@ export class TransactionStatusesComponent implements OnInit {
     }
 
     @Output()
-    private changeSelectedTransactionStatuses: EventEmitter<TransactionStatus[]> = new EventEmitter<TransactionStatus[]>();
+    private ChangeSelectedTransactionStatuses: EventEmitter<TransactionStatus[]> = new EventEmitter<TransactionStatus[]>();
 
     @Input('Statuses')
     set Statuses(value: TransactionStatus[]) {
@@ -48,7 +48,7 @@ export class TransactionStatusesComponent implements OnInit {
         this.Form.valueChanges
             .subscribe(() => {
                 if (this.Form.valid) {
-                    this.changeSelectedTransactionStatuses.emit(this.Form.value.statuses)
+                    this.ChangeSelectedTransactionStatuses.emit(this.Form.value.statuses)
                 }
             });
     }

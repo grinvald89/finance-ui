@@ -19,7 +19,7 @@ export class TransactionTypesComponent implements OnInit {
     }
 
     @Output()
-    private changeSelectedTransactionTypes: EventEmitter<TransactionType[]> = new EventEmitter<TransactionType[]>();
+    private ChangeSelectedTransactionTypes: EventEmitter<TransactionType[]> = new EventEmitter<TransactionType[]>();
 
     @Input('Types')
     set Types(value: TransactionType[]) {
@@ -48,7 +48,7 @@ export class TransactionTypesComponent implements OnInit {
         this.Form.valueChanges
             .subscribe(() => {
                 if (this.Form.valid) {
-                    this.changeSelectedTransactionTypes.emit(this.Form.value.types)
+                    this.ChangeSelectedTransactionTypes.emit(this.Form.value.types)
                 }
             });
     }

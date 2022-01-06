@@ -19,7 +19,7 @@ export class UsersComponent implements OnInit {
     }
 
     @Output()
-    private changeSelectedUsers: EventEmitter<User[]> = new EventEmitter<User[]>();
+    private ChangeSelectedUsers: EventEmitter<User[]> = new EventEmitter<User[]>();
 
     @Input('Users')
     set Users(value: User[]) {
@@ -48,7 +48,7 @@ export class UsersComponent implements OnInit {
         this.Form.valueChanges
             .subscribe(() => {
                 if (this.Form.valid) {
-                    this.changeSelectedUsers.emit(this.Form.value.users)
+                    this.ChangeSelectedUsers.emit(this.Form.value.users)
                 }
             });
     }

@@ -3,7 +3,7 @@ import { FormControl } from '@angular/forms';
 import * as _ from 'lodash';
 
 import { TransactionStatus, TransactionType, User } from 'src/models';
-import { FinancialTransactionFilterFacade } from '../../core';
+import { FinancialTransactionFilterFacade, Period } from '../../core';
 
 interface Pokemon {
     value: string;
@@ -80,6 +80,10 @@ export class FinancialTransactionFilterComponent implements OnInit {
 
     public onChangedSelectedUsers(selectedUsers: User[]): void {
         console.log(selectedUsers);
+    }
+
+    public onChangedSelectedPeriod(selectedPeriod: Period): void {
+        console.log(selectedPeriod);
     }
 
     pokemonControl = new FormControl();

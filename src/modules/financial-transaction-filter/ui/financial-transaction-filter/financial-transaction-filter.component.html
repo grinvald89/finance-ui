@@ -1,23 +1,27 @@
 <div class="filters">
     <div class="filter-container">
         <transaction-types
-            (changeSelectedTransactionTypes)="onChangedSelectedTransactionTypes($event)"
+            (ChangeSelectedTransactionTypes)="onChangedSelectedTransactionTypes($event)"
             [Types]="TransactionTypes"
         ></transaction-types>
     </div>
 
     <div class="filter-container">
         <transaction-statuses
-            (changeSelectedTransactionStatuses)="onChangedSelectedTransactionStatuses($event)"
+            (ChangeSelectedTransactionStatuses)="onChangedSelectedTransactionStatuses($event)"
             [Statuses]="TransactionStatuses"
         ></transaction-statuses>
     </div>
 
     <div class="filter-container">
         <users
-            (changeSelectedUsers)="onChangedSelectedUsers($event)"
+            (ChangeSelectedUsers)="onChangedSelectedUsers($event)"
             [Users]="Users"
         ></users>
+    </div>
+
+    <div class="filter-container">
+        <dates (ChangeSelectedPeriod)="onChangedSelectedPeriod($event)"></dates>
     </div>
 </div>
 

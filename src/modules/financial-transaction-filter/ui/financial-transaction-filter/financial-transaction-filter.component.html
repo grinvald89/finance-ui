@@ -1,21 +1,7 @@
-<mat-form-field appearance="fill">
-    <mat-label>
-        Тип операции
-    </mat-label>
-    <mat-select
-        multiple
-        [formControl]="typeOfTransaction"
-    >
-        <mat-option
-            *ngFor="let type of TypesOfTransaction"
-            [value]="type"
-        >
-            {{ type.Name }}
-        </mat-option>
-    </mat-select>
-</mat-form-field>
-
-
+<transaction-types
+    (changeSelectedTransactionTypes)="onChangedSelectedTransactionTypes($event)"
+    [Types]="TransactionTypes"
+></transaction-types>
 
 
 

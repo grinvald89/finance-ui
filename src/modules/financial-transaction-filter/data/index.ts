@@ -1,1 +1,1 @@
-// export * from './mocks';
+export { FinancialTransactionFilterRepository } from './financial-transaction-filter.repository';

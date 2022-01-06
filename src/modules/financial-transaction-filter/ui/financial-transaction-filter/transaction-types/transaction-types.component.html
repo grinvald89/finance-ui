@@ -1,0 +1,22 @@
+<div
+    [formGroup]="Form"
+    class="form"
+>
+    <mat-form-field appearance="fill">
+        <mat-label>
+            Тип операции
+        </mat-label>
+        <mat-select
+            multiple
+            formControlName="types"
+            [compareWith]="compareTypes"
+        >
+            <mat-option
+                *ngFor="let type of Types"
+                [value]="type"
+            >
+                {{ type.Name }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>

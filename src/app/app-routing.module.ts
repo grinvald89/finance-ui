@@ -7,7 +7,7 @@ import { AuthGuard } from './auth.guard';
 const routes: Routes = [
     {
         path: '',
-        redirectTo: '/financial-transactions',
+        redirectTo: '/dashboard',
         pathMatch: 'full'
     },
     {
@@ -20,9 +20,14 @@ const routes: Routes = [
             },
             {
                 canActivate: [AuthGuard],
-                path: 'financial-transactions',
-                loadChildren: () => import('../modules/financial-transactions/bootstrap/financial-transactions.module').then(m => m.FinancialTransactionsModule)
+                path: 'dashboard',
+                loadChildren: () => import('../modules/dashboard/bootstrap/dashboard.module').then(m => m.DashboardModule)
             }
+            // {
+            //     canActivate: [AuthGuard],
+            //     path: 'financial-transactions',
+            //     loadChildren: () => import('../modules/financial-transactions/bootstrap/financial-transactions.module').then(m => m.FinancialTransactionsModule)
+            // }
         ]
     }
 ];

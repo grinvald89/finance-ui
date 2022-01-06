@@ -1,7 +1,9 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import * as _ from 'lodash';
 
-import { FinancialTransactionFilterFacade, TypeTransaction } from '../../core';
+import { TransactionType } from 'src/models';
+import { FinancialTransactionFilterFacade } from '../../core';
 
 interface Pokemon {
     value: string;
@@ -21,24 +23,29 @@ interface PokemonGroup {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FinancialTransactionFilterComponent implements OnInit {
-    typeOfTransaction = new FormControl();
+    private transactionTypes: TransactionType[] = [];
 
-    private typesOfTransaction: TypeTransaction[] = [];
-
-    get TypesOfTransaction(): TypeTransaction[] {
-        return this.typesOfTransaction;
+    get TransactionTypes(): TransactionType[] {
+        return this.transactionTypes;
     }
-    set TypesOfTransaction(value: TypeTransaction[]) {
-        this.typesOfTransaction = value;
+    set TransactionTypes(value: TransactionType[]) {
+        this.transactionTypes = value;
+        this.changeDetector.detectChanges();
     }
 
-    constructor(private facade: FinancialTransactionFilterFacade) {
-
-    }
+    constructor(
+        private readonly facade: FinancialTransactionFilterFacade,
+        private readonly changeDetector: ChangeDetectorRef
+    ) { }
 
     public ngOnInit(): void {
-        // this.facade.getTypesTransactions()
-        //     .subscribe(res => this.TypesOfTransaction = res);
+        this.facade.getTransactionTypes()
+            .subscribe((transactionTypes: TransactionType[]): TransactionType[] =>
+                this.TransactionTypes = transactionTypes);
+    }
+
+    public onChangedSelectedTransactionTypes(selectedTransactionTypes: TransactionType[]): void {
+        console.log(selectedTransactionTypes);
     }
 
 

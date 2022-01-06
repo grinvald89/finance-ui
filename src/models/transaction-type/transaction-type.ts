@@ -1,12 +1,12 @@
 import * as _ from 'lodash';
 
-import { ITypeTransaction } from './type-transaction.interface';
+import { ITransactionType } from './transaction-type.interface';
 
-export class TypeTransaction {
+export class TransactionType {
     private readonly id: string = '';
     private readonly name: string = '';
 
-    constructor(params?: ITypeTransaction) {
+    constructor(params?: ITransactionType) {
         if (!_.isUndefined(params)) {
             this.id = params.id;
             this.name = params.name;

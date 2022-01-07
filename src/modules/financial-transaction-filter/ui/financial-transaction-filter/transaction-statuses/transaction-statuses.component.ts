@@ -54,6 +54,6 @@ export class TransactionStatusesComponent implements OnInit {
     }
 
     private setSelectedFormValues(): void {
-        this.Form.controls['statuses'].setValue(this.Statuses, { emitEvent: false });
+        this.Form.controls['statuses'].setValue(this.Statuses);
     }
 }

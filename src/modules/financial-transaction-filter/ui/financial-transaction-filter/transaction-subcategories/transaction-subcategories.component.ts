@@ -54,6 +54,6 @@ export class TransactionSubcategoriesComponent implements OnInit {
     }
 
     private setSelectedFormValues(): void {
-        this.Form.controls['subCategories'].setValue(this.SubCategories, { emitEvent: false });
+        this.Form.controls['subCategories'].setValue(this.SubCategories);
     }
 }

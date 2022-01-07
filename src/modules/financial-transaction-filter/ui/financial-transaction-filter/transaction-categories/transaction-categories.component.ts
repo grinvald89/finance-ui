@@ -10,7 +10,7 @@ import { TransactionCategory } from 'src/models';
     styleUrls: ['./transaction-categories.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TransactionCategoriesComponent implements OnInit {
+export class TransactionCategoriesComponent {
     private form: FormGroup;
     private categories: TransactionCategory[] = [];
 
@@ -34,6 +34,13 @@ export class TransactionCategoriesComponent implements OnInit {
         this.form = this.formBuilder.group({
             categories: new FormControl('')
         });
+
+        this.Form.valueChanges
+            .subscribe(() => {
+                if (this.Form.valid) {
+                    this.ChangeSelectedTransactionCategories.emit(this.Form.value.categories)
+                }
+            });
     }
 
     public compareCategories(t1: TransactionCategory, t2: TransactionCategory) {
@@ -44,16 +51,7 @@ export class TransactionCategoriesComponent implements OnInit {
         return t1.Id === t2.Id;
     }
 
-    public ngOnInit(): void {
-        this.Form.valueChanges
-            .subscribe(() => {
-                if (this.Form.valid) {
-                    this.ChangeSelectedTransactionCategories.emit(this.Form.value.categories)
-                }
-            });
-    }
-
     private setSelectedFormValues(): void {
-        this.Form.controls['categories'].setValue(this.Categories, { emitEvent: false });
+        this.Form.controls['categories'].setValue(this.Categories);
     }
 }

@@ -54,6 +54,6 @@ export class UsersComponent implements OnInit {
     }
 
     private setSelectedFormValues(): void {
-        this.Form.controls['users'].setValue(this.Users, { emitEvent: false });
+        this.Form.controls['users'].setValue(this.Users);
     }
 }

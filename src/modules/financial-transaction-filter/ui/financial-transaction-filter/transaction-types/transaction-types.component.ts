@@ -54,6 +54,6 @@ export class TransactionTypesComponent implements OnInit {
     }
 
     private setSelectedFormValues(): void {
-        this.Form.controls['types'].setValue(this.Types, { emitEvent: false });
+        this.Form.controls['types'].setValue(this.Types);
     }
 }

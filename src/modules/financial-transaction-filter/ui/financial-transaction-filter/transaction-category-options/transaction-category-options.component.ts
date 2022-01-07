@@ -11,11 +11,14 @@ import { TransactionCategoryOption } from 'src/models';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TransactionCategoryOptionsComponent implements OnInit {
-    private form: FormGroup;
+    private form!: FormGroup;
     private categoryOptions: TransactionCategoryOption[] = [];
 
     get Form(): FormGroup {
         return this.form;
+    }
+    set Form(value: FormGroup) {
+        this.form = value;
     }
 
     @Output()
@@ -24,6 +27,7 @@ export class TransactionCategoryOptionsComponent implements OnInit {
     @Input('CategoryOptions')
     set CategoryOptions(value: TransactionCategoryOption[]) {
         this.categoryOptions = value;
+        this.updateForm();
         this.setSelectedFormValues();
     }
     get CategoryOptions(): TransactionCategoryOption[] {
@@ -31,9 +35,7 @@ export class TransactionCategoryOptionsComponent implements OnInit {
     }
 
     constructor(private readonly formBuilder: FormBuilder) {
-        this.form = this.formBuilder.group({
-            categoryOptions: new FormControl('')
-        });
+        this.updateForm();
     }
 
     public compareCategoryOptions(t1: TransactionCategoryOption, t2: TransactionCategoryOption) {
@@ -53,7 +55,13 @@ export class TransactionCategoryOptionsComponent implements OnInit {
             });
     }
 
+    private updateForm(): void {
+        this.Form = this.formBuilder.group({
+            categoryOptions: new FormControl('')
+        });
+    }
+
     private setSelectedFormValues(): void {
-        this.Form.controls['categoryOptions'].setValue(this.CategoryOptions, { emitEvent: false });
+        this.Form.controls['categoryOptions'].setValue(this.CategoryOptions);
     }
 }

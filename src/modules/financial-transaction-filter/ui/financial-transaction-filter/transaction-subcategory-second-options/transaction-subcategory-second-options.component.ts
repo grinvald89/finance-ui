@@ -55,6 +55,6 @@ export class TransactionSubcategorySecondOptionsComponent implements OnInit {
     }
 
     private setSelectedFormValues(): void {
-        this.Form.controls['subCategorySecondOptions'].setValue(this.SubCategorySecondOptions, { emitEvent: false });
+        this.Form.controls['subCategorySecondOptions'].setValue(this.SubCategorySecondOptions);
     }
 }

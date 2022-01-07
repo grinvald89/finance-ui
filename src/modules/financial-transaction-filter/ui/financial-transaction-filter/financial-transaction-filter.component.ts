@@ -1,7 +1,16 @@
 import { Component, ChangeDetectionStrategy, OnInit, ChangeDetectorRef } from '@angular/core';
 import * as _ from 'lodash';
 
-import { TransactionCategory, TransactionCategoryOption, TransactionStatus, TransactionSubCategory, TransactionSubCategoryFirstOption, TransactionSubCategorySecondOption, TransactionType, User } from 'src/models';
+import {
+    TransactionCategory,
+    TransactionCategoryOption,
+    TransactionStatus,
+    TransactionSubCategory,
+    TransactionSubCategoryFirstOption,
+    TransactionSubCategorySecondOption,
+    TransactionType,
+    User
+} from 'src/models';
 import { FinancialTransactionFilterFacade, Period } from '../../core';
 
 @Component({
@@ -11,6 +20,9 @@ import { FinancialTransactionFilterFacade, Period } from '../../core';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FinancialTransactionFilterComponent implements OnInit {
+    private isTransactionCategoriesLoaded = false;
+    private isTransactionCategoryOptionsLoaded = false;
+    private allTransactionCategoryOptions: TransactionCategoryOption[] = [];
     private transactionCategories: TransactionCategory[] = [];
     private transactionCategoryOptions: TransactionCategoryOption[] = [];
     private transactionStatuses: TransactionStatus[] = [];
@@ -19,6 +31,16 @@ export class FinancialTransactionFilterComponent implements OnInit {
     private transactionSubCategorySecondOptions: TransactionSubCategorySecondOption[] = [];
     private transactionTypes: TransactionType[] = [];
     private users: User[] = [];
+
+    private selectedPeriod!: Period;
+    private selectedTransactionCategories: TransactionCategory[] = [];
+    private selectedTransactionCategoryOptions: TransactionCategoryOption[] = [];
+    private selectedTransactionStatuses: TransactionStatus[] = [];
+    private selectedTransactionSubCategories: TransactionSubCategory[] = [];
+    private selectedTransactionSubCategoryFirstOptions: TransactionSubCategoryFirstOption[] = [];
+    private selectedTransactionSubCategorySecondOptions: TransactionSubCategorySecondOption[] = [];
+    private selectedTransactionTypes: TransactionType[] = [];
+    private selectedUsers: User[] = [];
 
     get TransactionCategories(): TransactionCategory[] {
         return this.transactionCategories;
@@ -91,16 +113,21 @@ export class FinancialTransactionFilterComponent implements OnInit {
 
     public ngOnInit(): void {
         this.facade.getTransactionCategories()
-            .subscribe((transactionCategories: TransactionCategory[]): TransactionCategory[] =>
-                this.TransactionCategories = transactionCategories);
+            .subscribe((transactionCategories: TransactionCategory[]): void => {
+                this.isTransactionCategoriesLoaded = true;
+                this.TransactionCategories = transactionCategories;
+            });
 
         this.facade.getTransactionCategoryOptions()
-            .subscribe((transactionCategoryOptions: TransactionCategoryOption[]): TransactionCategoryOption[] =>
-                this.TransactionCategoryOptions = transactionCategoryOptions);
+            .subscribe((transactionCategoryOptions: TransactionCategoryOption[]): void => {
+                this.isTransactionCategoryOptionsLoaded = true;
+                this.allTransactionCategoryOptions = transactionCategoryOptions;
+            });
 
         this.facade.getTransactionStatuses()
             .subscribe((transactionStatuses: TransactionStatus[]): TransactionStatus[] =>
                 this.TransactionStatuses = transactionStatuses);
+                this.updateTransactionCategoryOptions();
 
         this.facade.getTransactionSubCategories()
             .subscribe((transactionSubCategories: TransactionSubCategory[]): TransactionSubCategory[] =>
@@ -123,39 +150,61 @@ export class FinancialTransactionFilterComponent implements OnInit {
                 this.Users = users);
     }
 
+    public onChangedSelectedPeriod(selectedPeriod: Period): void {
+        this.selectedPeriod = selectedPeriod;
+    }
+
     public onChangedSelectedTransactionCategories(selectedTransactionCategories: TransactionCategory[]): void {
-        console.log(selectedTransactionCategories);
+        this.selectedTransactionCategories = selectedTransactionCategories;
+        this.updateTransactionCategoryOptions();
     }
 
     public onChangedSelectedTransactionCategoryOptions(selectedTransactionCategoryOptions: TransactionCategoryOption[]): void {
-        console.log(selectedTransactionCategoryOptions);
+        this.selectedTransactionCategoryOptions = selectedTransactionCategoryOptions;
+        // this.updateTransactionSubCategories();
     }
 
     public onChangedSelectedTransactionStatuses(selectedTransactionStatuses: TransactionStatus[]): void {
-        console.log(selectedTransactionStatuses);
+        this.selectedTransactionStatuses = selectedTransactionStatuses;
     }
 
     public onChangedSelectedTransactionSubCategories(selectedTransactionSubCategories: TransactionSubCategory[]): void {
-        console.log(selectedTransactionSubCategories);
+        this.selectedTransactionSubCategories = selectedTransactionSubCategories;
+        // this.updateTransactionSubCategoryFirstOptions();
     }
 
     public onChangedSelectedTransactionSubCategoryFirstOptions(selectedTransactionSubCategoryFirstOptions: TransactionSubCategoryFirstOption[]): void {
-        console.log(selectedTransactionSubCategoryFirstOptions);
+        this.selectedTransactionSubCategoryFirstOptions = selectedTransactionSubCategoryFirstOptions;
+        // this.updateTransactionSubCategorySecondOptions();
     }
 
     public onChangedSelectedTransactionSubCategorySecondOptions(selectedTransactionSubCategorySecondOptions: TransactionSubCategorySecondOption[]): void {
-        console.log(selectedTransactionSubCategorySecondOptions);
+        this.selectedTransactionSubCategorySecondOptions = selectedTransactionSubCategorySecondOptions;
     }
 
     public onChangedSelectedTransactionTypes(selectedTransactionTypes: TransactionType[]): void {
-        console.log(selectedTransactionTypes);
+        this.selectedTransactionTypes = selectedTransactionTypes;
     }
 
     public onChangedSelectedUsers(selectedUsers: User[]): void {
-        console.log(selectedUsers);
+        this.selectedUsers = selectedUsers;
     }
 
-    public onChangedSelectedPeriod(selectedPeriod: Period): void {
-        console.log(selectedPeriod);
+    private updateTransactionCategoryOptions() {
+        if (this.isTransactionCategoriesLoaded && this.isTransactionCategoryOptionsLoaded) {
+            let transactionCategoryOptions: TransactionCategoryOption[] = [];
+
+            _.forEach(this.selectedTransactionCategories, (category: TransactionCategory): void => {
+                const options: TransactionCategoryOption[] =
+                    _.filter(
+                        _.cloneDeep(this.allTransactionCategoryOptions),
+                        (option: TransactionCategoryOption): boolean => option.CategoryId === category.Id
+                    );
+
+                transactionCategoryOptions = _.concat(transactionCategoryOptions, options);
+            });
+
+            this.TransactionCategoryOptions = transactionCategoryOptions;
+        }
     }
 }

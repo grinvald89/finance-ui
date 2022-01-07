@@ -24,9 +24,11 @@ export class FinancialTransactionFilterComponent implements OnInit {
     private isTransactionCategoryOptionsLoaded = false;
     private isTransactionSubCategoriesLoaded = false;
     private isTransactionSubCategoryFirstOptionsLoaded = false;
+    private isTransactionSubCategorySecondOptionsLoaded = false;
     private allTransactionCategoryOptions: TransactionCategoryOption[] = [];
     private allTransactionSubCategories: TransactionSubCategory[] = [];
     private allTransactionSubCategoryFirstOptions: TransactionSubCategoryFirstOption[] = [];
+    private allTransactionSubCategorySecondOptions: TransactionSubCategorySecondOption[] = [];
     private transactionCategories: TransactionCategory[] = [];
     private transactionCategoryOptions: TransactionCategoryOption[] = [];
     private transactionStatuses: TransactionStatus[] = [];
@@ -156,8 +158,11 @@ export class FinancialTransactionFilterComponent implements OnInit {
             });
 
         this.facade.getTransactionSubCategorySecondOptions()
-            .subscribe((transactionSubCategorySecondOptions: TransactionSubCategorySecondOption[]): TransactionSubCategorySecondOption[] =>
-                this.TransactionSubCategorySecondOptions = transactionSubCategorySecondOptions);
+            .subscribe((transactionSubCategorySecondOptions: TransactionSubCategorySecondOption[]): void => {
+                this.isTransactionSubCategorySecondOptionsLoaded = true;
+                this.TransactionSubCategorySecondOptions = transactionSubCategorySecondOptions;
+                this.updateTransactionSubCategorySecondOptions();
+            });
 
         this.facade.getTransactionTypes()
             .subscribe((transactionTypes: TransactionType[]): TransactionType[] =>
@@ -193,7 +198,7 @@ export class FinancialTransactionFilterComponent implements OnInit {
 
     public onChangedSelectedTransactionSubCategoryFirstOptions(selectedTransactionSubCategoryFirstOptions: TransactionSubCategoryFirstOption[]): void {
         this.selectedTransactionSubCategoryFirstOptions = selectedTransactionSubCategoryFirstOptions;
-        // this.updateTransactionSubCategorySecondOptions();
+        this.updateTransactionSubCategorySecondOptions();
     }
 
     public onChangedSelectedTransactionSubCategorySecondOptions(selectedTransactionSubCategorySecondOptions: TransactionSubCategorySecondOption[]): void {
@@ -304,7 +309,64 @@ export class FinancialTransactionFilterComponent implements OnInit {
 
             this.TransactionSubCategoryFirstOptions = transactionSubCategoryFirstOptions;
 
-            // this.updateTransactionSubCategories();
+            this.updateTransactionSubCategorySecondOptions();
         } 
+    }
+
+    private updateTransactionSubCategorySecondOptions(): void {
+        if (
+            this.isTransactionCategoriesLoaded &&
+            this.isTransactionCategoryOptionsLoaded &&
+            this.isTransactionSubCategoriesLoaded &&
+            this.isTransactionSubCategoryFirstOptionsLoaded &&
+            this.isTransactionSubCategorySecondOptionsLoaded
+        ) {
+            const subCategoriesWithFirstOptions: TransactionSubCategory[] = [];
+            const subCategoriesWithOutFirstOptions: TransactionSubCategory[] = [];
+
+            _.forEach(this.selectedTransactionSubCategories, (subCategory: TransactionSubCategory): void => {
+                const isSubCategoryWithFirstOptions: boolean = _.filter(
+                    this.allTransactionSubCategoryFirstOptions,
+                    (firstOption: TransactionSubCategoryFirstOption): boolean => firstOption.SubCategoryId === subCategory.Id
+                ).length > 0;
+
+                if (isSubCategoryWithFirstOptions) {
+                    subCategoriesWithFirstOptions.push(subCategory);
+                } else {
+                    subCategoriesWithOutFirstOptions.push(subCategory);
+                }
+            });
+
+            let transactionSubCategorySecondOptions: TransactionSubCategorySecondOption[] = [];
+
+            _.forEach(subCategoriesWithOutFirstOptions, (subCategory: TransactionSubCategory): void => {
+                const subCategorySecondOptions: TransactionSubCategorySecondOption[] = _.filter(
+                    this.allTransactionSubCategorySecondOptions,
+                    (subCategorySecondOption: TransactionSubCategorySecondOption): boolean =>
+                        subCategorySecondOption.SubCategoryId === subCategory.Id
+                );
+
+                transactionSubCategorySecondOptions = _.concat(transactionSubCategorySecondOptions, subCategorySecondOptions);
+            });
+
+            _.forEach(subCategoriesWithFirstOptions, (subCategory: TransactionSubCategory): void => {
+                const firstOptions: TransactionSubCategoryFirstOption[] = _.filter(
+                    this.selectedTransactionSubCategoryFirstOptions,
+                    (firstOption: TransactionSubCategoryFirstOption): boolean => firstOption.SubCategoryId === subCategory.Id
+                );
+
+                _.forEach(firstOptions, (firstOption: TransactionSubCategoryFirstOption): void => {
+                    const secondOptions: TransactionSubCategorySecondOption[] = _.filter(
+                        this.allTransactionSubCategorySecondOptions,
+                        (secondOption: TransactionSubCategorySecondOption): boolean =>
+                            secondOption.SubCategoryId === subCategory.Id && secondOption.SubCategoryFirstOptionId === firstOption.Id
+                    );
+
+                    transactionSubCategorySecondOptions = _.concat(transactionSubCategorySecondOptions, secondOptions);
+                });
+            });
+
+            this.TransactionSubCategorySecondOptions = transactionSubCategorySecondOptions;
+        }
     }
 }

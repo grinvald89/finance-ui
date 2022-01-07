@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import * as _ from 'lodash';
 
@@ -10,12 +10,15 @@ import { TransactionSubCategoryFirstOption } from 'src/models';
     styleUrls: ['./transaction-subcategory-first-options.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TransactionSubcategoryFirstOptionsComponent implements OnInit {
-    private form: FormGroup;
+export class TransactionSubcategoryFirstOptionsComponent {
+    private form!: FormGroup;
     private subCategoryFirstOptions: TransactionSubCategoryFirstOption[] = [];
 
     get Form(): FormGroup {
         return this.form;
+    }
+    set Form(value: FormGroup) {
+        this.form = value;
     }
 
     @Output()
@@ -32,9 +35,7 @@ export class TransactionSubcategoryFirstOptionsComponent implements OnInit {
     }
 
     constructor(private readonly formBuilder: FormBuilder) {
-        this.form = this.formBuilder.group({
-            subCategoryFirstOptions: new FormControl('')
-        });
+        this.updateForm();
     }
 
     public compareSubCategoryFirstOptions(t1: TransactionSubCategoryFirstOption, t2: TransactionSubCategoryFirstOption) {
@@ -45,7 +46,11 @@ export class TransactionSubcategoryFirstOptionsComponent implements OnInit {
         return t1.Id === t2.Id;
     }
 
-    public ngOnInit(): void {
+    private updateForm(): void {
+        this.Form = this.formBuilder.group({
+            subCategoryFirstOptions: new FormControl('')
+        });
+
         this.Form.valueChanges
             .subscribe(() => {
                 if (this.Form.valid) {

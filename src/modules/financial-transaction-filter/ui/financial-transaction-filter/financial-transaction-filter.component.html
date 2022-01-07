@@ -51,6 +51,13 @@
             [SubCategoryFirstOptions]="TransactionSubCategoryFirstOptions"
         ></transaction-subcategory-first-options>
     </div>
+
+    <div class="filter-container">
+        <transaction-subcategory-second-options
+            (ChangeSelectedTransactionSubCategorySecondOptions)="onChangedSelectedTransactionSubCategorySecondOptions($event)"
+            [SubCategorySecondOptions]="TransactionSubCategorySecondOptions"
+        ></transaction-subcategory-second-options>
+    </div>
 </div>
 
 

@@ -1,11 +1,12 @@
 .filters {
     display: flex;
+    flex-wrap: wrap;
 }
 
 .filter-container {
-    margin-left: 20px;
+    margin-right: 24px;
 
-    &:first-child {
-        margin-left: 0;
+    &:last-child {
+        margin-right: 0;
     }
 }

@@ -1,17 +1,19 @@
 import * as _ from 'lodash';
 
-import { ITransactionSubCategoryFirstOption } from './transaction-subcategory-first-option.interface';
+import { ITransactionSubCategorySecondOption } from './transaction-subcategory-second-option.interface';
 
-export class TransactionSubCategoryFirstOption {
+export class TransactionSubCategorySecondOption {
     private readonly id: string = '';
     private readonly name: string = '';
     private readonly subCategoryId: string = '';
+    private readonly subCategoryFirstOptionId: string = '';
 
-    constructor(params?: ITransactionSubCategoryFirstOption) {
+    constructor(params?: ITransactionSubCategorySecondOption) {
         if (!_.isUndefined(params)) {
             this.id = params.id;
             this.name = params.name;
             this.subCategoryId = params.subCategoryId;
+            this.subCategoryFirstOptionId = params.subCategoryFirstOptionId;
         }
     }
 
@@ -25,5 +27,9 @@ export class TransactionSubCategoryFirstOption {
 
     get SubCategoryId(): string {
         return this.subCategoryId;
+    }
+
+    get SubCategoryFirstOptionId(): string {
+        return this.subCategoryFirstOptionId;
     }
 }

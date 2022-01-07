@@ -18,6 +18,7 @@ import { TransactionCategoriesComponent } from '../ui/financial-transaction-filt
 import { TransactionCategoryOptionsComponent } from '../ui/financial-transaction-filter/transaction-category-options/transaction-category-options.component';
 import { TransactionSubcategoriesComponent } from '../ui/financial-transaction-filter/transaction-subcategories/transaction-subcategories.component';
 import { TransactionSubcategoryFirstOptionsComponent } from '../ui/financial-transaction-filter/transaction-subcategory-first-options/transaction-subcategory-first-options.component';
+import { TransactionSubcategorySecondOptionsComponent } from '../ui/financial-transaction-filter/transaction-subcategory-second-options/transaction-subcategory-second-options.component';
 
 @NgModule({
     imports: [
@@ -40,7 +41,8 @@ import { TransactionSubcategoryFirstOptionsComponent } from '../ui/financial-tra
         TransactionCategoriesComponent,
         TransactionCategoryOptionsComponent,
         TransactionSubcategoriesComponent,
-        TransactionSubcategoryFirstOptionsComponent
+        TransactionSubcategoryFirstOptionsComponent,
+        TransactionSubcategorySecondOptionsComponent
     ],
     exports: [FinancialTransactionFilterComponent],
     providers: [

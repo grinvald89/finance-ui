@@ -1,0 +1,22 @@
+<div
+    [formGroup]="Form"
+    class="form"
+>
+    <mat-form-field appearance="fill">
+        <mat-label>
+            Опция 2-ого уровня подкатегории
+        </mat-label>
+        <mat-select
+            multiple
+            formControlName="subCategorySecondOptions"
+            [compareWith]="compareSubCategorySecondOptions"
+        >
+            <mat-option
+                *ngFor="let secondOption of SubCategorySecondOptions"
+                [value]="secondOption"
+            >
+                {{ secondOption.Name }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>

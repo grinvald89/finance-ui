@@ -9,6 +9,7 @@ import {
     ITransactionStatus,
     ITransactionSubCategory,
     ITransactionSubCategoryFirstOption,
+    ITransactionSubCategorySecondOption,
     ITransactionType,
     IUser,
     TransactionCategory,
@@ -16,6 +17,7 @@ import {
     TransactionStatus,
     TransactionSubCategory,
     TransactionSubCategoryFirstOption,
+    TransactionSubCategorySecondOption,
     TransactionType,
     User
 } from 'src/models';
@@ -110,6 +112,25 @@ export class FinancialTransactionFilterRepository {
                     _.map(transactionSubCategoryFirstOptions, (item) => new TransactionSubCategoryFirstOption(item)))
             );
     }
+
+    public getTransactionSubCategorySecondOptions(): Observable<TransactionSubCategorySecondOption[]> {
+        const headers: HttpHeaders = new HttpHeaders({
+            'Content-Type': 'application/json'
+        });
+
+        return this.http.get<ITransactionSubCategorySecondOption[]>(
+            'https://localhost:7062/api/transaction-sub-category-second-options',
+            {
+                headers
+            }
+        )
+            .pipe(
+                map((transactionSubCategorySecondOptions: ITransactionSubCategorySecondOption[]): TransactionSubCategorySecondOption[] =>
+                    _.map(transactionSubCategorySecondOptions, (item) => new TransactionSubCategorySecondOption(item)))
+            );
+    }
+
+    
 
     public getTransactionTypes(): Observable<TransactionType[]> {
         const headers: HttpHeaders = new HttpHeaders({

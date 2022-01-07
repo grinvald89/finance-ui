@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, OnInit, ChangeDetectorRef } from '@
 import { FormControl } from '@angular/forms';
 import * as _ from 'lodash';
 
-import { TransactionCategory, TransactionCategoryOption, TransactionStatus, TransactionSubCategory, TransactionType, User } from 'src/models';
+import { TransactionCategory, TransactionCategoryOption, TransactionStatus, TransactionSubCategory, TransactionSubCategoryFirstOption, TransactionType, User } from 'src/models';
 import { FinancialTransactionFilterFacade, Period } from '../../core';
 
 interface Pokemon {
@@ -23,13 +23,14 @@ interface PokemonGroup {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FinancialTransactionFilterComponent implements OnInit {
-    // (ChangeSelectedTransactionSubCategories)="onChangedSelectedTransactionSubCategories($event)"
-    // [SubCategories]="TransactionSubCategories"
+    // (ChangeSelectedTransactionSubCategoryFirstOptions)="ChangeSelectedTransactionSubCategoryFirstOptions($event)"
+    // [SubCategoryFirstOptions]="TransactionSubCategoryFirstOptions"
 
     private transactionCategories: TransactionCategory[] = [];
     private transactionCategoryOptions: TransactionCategoryOption[] = [];
     private transactionStatuses: TransactionStatus[] = [];
     private transactionSubCategories: TransactionSubCategory[] = [];
+    private transactionSubCategoryFirstOptions: TransactionSubCategoryFirstOption[] = [];
     private transactionTypes: TransactionType[] = [];
     private users: User[] = [];
 
@@ -62,6 +63,14 @@ export class FinancialTransactionFilterComponent implements OnInit {
     }
     set TransactionSubCategories(value: TransactionSubCategory[]) {
         this.transactionSubCategories = value;
+        this.changeDetector.detectChanges();
+    }
+
+    get TransactionSubCategoryFirstOptions(): TransactionSubCategoryFirstOption[] {
+        return this.transactionSubCategoryFirstOptions;
+    }
+    set TransactionSubCategoryFirstOptions(value: TransactionSubCategoryFirstOption[]) {
+        this.transactionSubCategoryFirstOptions = value;
         this.changeDetector.detectChanges();
     }
 
@@ -103,6 +112,10 @@ export class FinancialTransactionFilterComponent implements OnInit {
             .subscribe((transactionSubCategories: TransactionSubCategory[]): TransactionSubCategory[] =>
                 this.TransactionSubCategories = transactionSubCategories);
 
+        this.facade.getTransactionSubCategoryFirstOptions()
+            .subscribe((transactionSubCategoryFirstOptions: TransactionSubCategoryFirstOption[]): TransactionSubCategoryFirstOption[] =>
+                this.TransactionSubCategoryFirstOptions = transactionSubCategoryFirstOptions);
+
         this.facade.getTransactionTypes()
             .subscribe((transactionTypes: TransactionType[]): TransactionType[] =>
                 this.TransactionTypes = transactionTypes);
@@ -126,6 +139,10 @@ export class FinancialTransactionFilterComponent implements OnInit {
 
     public onChangedSelectedTransactionSubCategories(selectedTransactionSubCategories: TransactionSubCategory[]): void {
         console.log(selectedTransactionSubCategories);
+    }
+
+    public onChangedSelectedTransactionSubCategoryFirstOptions(selectedTransactionSubCategoryFirstOptions: TransactionSubCategoryFirstOption[]): void {
+        console.log(selectedTransactionSubCategoryFirstOptions);
     }
 
     public onChangedSelectedTransactionTypes(selectedTransactionTypes: TransactionType[]): void {

@@ -17,6 +17,7 @@ import { DatesComponent } from '../ui/financial-transaction-filter/dates/dates.c
 import { TransactionCategoriesComponent } from '../ui/financial-transaction-filter/transaction-categories/transaction-categories.component';
 import { TransactionCategoryOptionsComponent } from '../ui/financial-transaction-filter/transaction-category-options/transaction-category-options.component';
 import { TransactionSubcategoriesComponent } from '../ui/financial-transaction-filter/transaction-subcategories/transaction-subcategories.component';
+import { TransactionSubcategoryFirstOptionsComponent } from '../ui/financial-transaction-filter/transaction-subcategory-first-options/transaction-subcategory-first-options.component';
 
 @NgModule({
     imports: [
@@ -38,7 +39,8 @@ import { TransactionSubcategoriesComponent } from '../ui/financial-transaction-f
         DatesComponent,
         TransactionCategoriesComponent,
         TransactionCategoryOptionsComponent,
-        TransactionSubcategoriesComponent
+        TransactionSubcategoriesComponent,
+        TransactionSubcategoryFirstOptionsComponent
     ],
     exports: [FinancialTransactionFilterComponent],
     providers: [

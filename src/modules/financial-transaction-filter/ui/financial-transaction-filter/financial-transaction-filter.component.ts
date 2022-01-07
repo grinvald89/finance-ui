@@ -122,6 +122,7 @@ export class FinancialTransactionFilterComponent implements OnInit {
             .subscribe((transactionCategoryOptions: TransactionCategoryOption[]): void => {
                 this.isTransactionCategoryOptionsLoaded = true;
                 this.allTransactionCategoryOptions = transactionCategoryOptions;
+                this.updateTransactionCategoryOptions();
             });
 
         this.facade.getTransactionStatuses()

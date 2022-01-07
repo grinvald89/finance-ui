@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import * as _ from 'lodash';
 
@@ -10,7 +10,7 @@ import { TransactionCategoryOption } from 'src/models';
     styleUrls: ['./transaction-category-options.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TransactionCategoryOptionsComponent implements OnInit {
+export class TransactionCategoryOptionsComponent {
     private form!: FormGroup;
     private categoryOptions: TransactionCategoryOption[] = [];
 
@@ -36,6 +36,13 @@ export class TransactionCategoryOptionsComponent implements OnInit {
 
     constructor(private readonly formBuilder: FormBuilder) {
         this.updateForm();
+
+        this.Form.valueChanges
+            .subscribe(() => {
+                if (this.Form.valid) {
+                    this.ChangeSelectedTransactionCategoryOptions.emit(this.Form.value.categoryOptions)
+                }
+            });
     }
 
     public compareCategoryOptions(t1: TransactionCategoryOption, t2: TransactionCategoryOption) {
@@ -44,15 +51,6 @@ export class TransactionCategoryOptionsComponent implements OnInit {
         }
 
         return t1.Id === t2.Id;
-    }
-
-    public ngOnInit(): void {
-        this.Form.valueChanges
-            .subscribe(() => {
-                if (this.Form.valid) {
-                    this.ChangeSelectedTransactionCategoryOptions.emit(this.Form.value.categoryOptions)
-                }
-            });
     }
 
     private updateForm(): void {

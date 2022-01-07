@@ -36,13 +36,6 @@ export class TransactionCategoryOptionsComponent {
 
     constructor(private readonly formBuilder: FormBuilder) {
         this.updateForm();
-
-        this.Form.valueChanges
-            .subscribe(() => {
-                if (this.Form.valid) {
-                    this.ChangeSelectedTransactionCategoryOptions.emit(this.Form.value.categoryOptions)
-                }
-            });
     }
 
     public compareCategoryOptions(t1: TransactionCategoryOption, t2: TransactionCategoryOption) {
@@ -57,6 +50,13 @@ export class TransactionCategoryOptionsComponent {
         this.Form = this.formBuilder.group({
             categoryOptions: new FormControl('')
         });
+
+        this.Form.valueChanges
+            .subscribe(() => {
+                if (this.Form.valid) {
+                    this.ChangeSelectedTransactionCategoryOptions.emit(this.Form.value.categoryOptions)
+                }
+            });
     }
 
     private setSelectedFormValues(): void {

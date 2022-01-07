@@ -22,7 +22,9 @@ import { FinancialTransactionFilterFacade, Period } from '../../core';
 export class FinancialTransactionFilterComponent implements OnInit {
     private isTransactionCategoriesLoaded = false;
     private isTransactionCategoryOptionsLoaded = false;
+    private isTransactionSubCategoriesLoaded = false;
     private allTransactionCategoryOptions: TransactionCategoryOption[] = [];
+    private allTransactionSubCategories: TransactionSubCategory[] = [];
     private transactionCategories: TransactionCategory[] = [];
     private transactionCategoryOptions: TransactionCategoryOption[] = [];
     private transactionStatuses: TransactionStatus[] = [];
@@ -131,8 +133,11 @@ export class FinancialTransactionFilterComponent implements OnInit {
                 this.updateTransactionCategoryOptions();
 
         this.facade.getTransactionSubCategories()
-            .subscribe((transactionSubCategories: TransactionSubCategory[]): TransactionSubCategory[] =>
-                this.TransactionSubCategories = transactionSubCategories);
+            .subscribe((transactionSubCategories: TransactionSubCategory[]): void => {
+                this.isTransactionSubCategoriesLoaded = true;
+                this.allTransactionSubCategories = transactionSubCategories;
+                this.updateTransactionSubCategories();
+            });
 
         this.facade.getTransactionSubCategoryFirstOptions()
             .subscribe((transactionSubCategoryFirstOptions: TransactionSubCategoryFirstOption[]): TransactionSubCategoryFirstOption[] =>
@@ -162,7 +167,7 @@ export class FinancialTransactionFilterComponent implements OnInit {
 
     public onChangedSelectedTransactionCategoryOptions(selectedTransactionCategoryOptions: TransactionCategoryOption[]): void {
         this.selectedTransactionCategoryOptions = selectedTransactionCategoryOptions;
-        // this.updateTransactionSubCategories();
+        this.updateTransactionSubCategories();
     }
 
     public onChangedSelectedTransactionStatuses(selectedTransactionStatuses: TransactionStatus[]): void {
@@ -206,6 +211,61 @@ export class FinancialTransactionFilterComponent implements OnInit {
             });
 
             this.TransactionCategoryOptions = transactionCategoryOptions;
+
+            this.updateTransactionSubCategories();
+        }
+    }
+
+    private updateTransactionSubCategories(): void {
+        if (
+            this.isTransactionCategoriesLoaded &&
+            this.isTransactionCategoryOptionsLoaded &&
+            this.isTransactionSubCategoriesLoaded
+        ) {
+            const categoriesWithOptions: TransactionCategory[] = [];
+            const categoriesWithOutOptions: TransactionCategory[] = [];
+
+            _.forEach(this.selectedTransactionCategories, (category: TransactionCategory): void => {
+                const isCategoryWithOptions: boolean = _.filter(
+                    this.allTransactionCategoryOptions,
+                    (option: TransactionCategoryOption): boolean => option.CategoryId === category.Id
+                ).length > 0;
+
+                if (isCategoryWithOptions) {
+                    categoriesWithOptions.push(category);
+                } else {
+                    categoriesWithOutOptions.push(category);
+                }
+            });
+
+            let transactionSubCategories: TransactionSubCategory[] = [];
+
+            _.forEach(categoriesWithOutOptions, (category: TransactionCategory): void => {
+                const subCategories: TransactionSubCategory[] = _.filter(
+                    this.allTransactionSubCategories,
+                    (subCategory: TransactionSubCategory): boolean => subCategory.CategoryId === category.Id
+                );
+
+                transactionSubCategories = _.concat(transactionSubCategories, subCategories);
+            });
+
+            _.forEach(categoriesWithOptions, (category: TransactionCategory): void => {
+                const options: TransactionCategoryOption[] = _.filter(
+                    this.selectedTransactionCategoryOptions,
+                    (option: TransactionCategoryOption): boolean => option.CategoryId === category.Id
+                );
+
+                _.forEach(options, (option: TransactionCategoryOption): void => {
+                    const subCategories: TransactionSubCategory[] = _.filter(
+                        this.allTransactionSubCategories,
+                        (subCategory: TransactionSubCategory): boolean => subCategory.CategoryId === category.Id && subCategory.CategoryOptionId === option.Id
+                    );
+
+                    transactionSubCategories = _.concat(transactionSubCategories, subCategories);
+                });
+            });
+
+            this.TransactionSubCategories = transactionSubCategories;
         }
     }
 }

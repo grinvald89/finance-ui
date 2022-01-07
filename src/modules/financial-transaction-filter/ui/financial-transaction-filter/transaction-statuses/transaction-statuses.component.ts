@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import * as _ from 'lodash';
 
@@ -10,7 +10,7 @@ import { TransactionStatus } from 'src/models';
     styleUrls: ['./transaction-statuses.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TransactionStatusesComponent implements OnInit {
+export class TransactionStatusesComponent {
     private form: FormGroup;
     private statuses: TransactionStatus[] = [];
 
@@ -34,6 +34,13 @@ export class TransactionStatusesComponent implements OnInit {
         this.form = this.formBuilder.group({
             statuses: new FormControl('')
         });
+
+        this.Form.valueChanges
+            .subscribe(() => {
+                if (this.Form.valid) {
+                    this.ChangeSelectedTransactionStatuses.emit(this.Form.value.statuses)
+                }
+            });
     }
 
     public compareTypes(s1: TransactionStatus, s2: TransactionStatus) {
@@ -42,15 +49,6 @@ export class TransactionStatusesComponent implements OnInit {
         }
 
         return s1.Id === s2.Id;
-    }
-
-    public ngOnInit(): void {
-        this.Form.valueChanges
-            .subscribe(() => {
-                if (this.Form.valid) {
-                    this.ChangeSelectedTransactionStatuses.emit(this.Form.value.statuses)
-                }
-            });
     }
 
     private setSelectedFormValues(): void {

@@ -17,61 +17,67 @@
         </ng-container>
     </div>
 
-    <div class="filter-container">
-        <ng-container *ngIf="Users.length > 0">
-            <users
-                (ChangeSelectedUsers)="onChangedSelectedUsers($event)"
-                [Users]="Users"
-            ></users>
-        </ng-container>
+    <div
+        *ngIf="Users.length > 0"
+        class="filter-container"
+    >
+        <users
+            (ChangeSelectedUsers)="onChangedSelectedUsers($event)"
+            [Users]="Users"
+        ></users>
     </div>
 
     <div class="filter-container">
         <dates (ChangeSelectedPeriod)="onChangedSelectedPeriod($event)"></dates>
     </div>
 
-    <div class="filter-container">
-        <ng-container *ngIf="TransactionCategories.length > 0">
-            <transaction-categories
-                (ChangeSelectedTransactionCategories)="onChangedSelectedTransactionCategories($event)"
-                [Categories]="TransactionCategories"
-            ></transaction-categories>
-        </ng-container>
+    <div
+        *ngIf="TransactionCategories.length > 0"
+        class="filter-container"
+    >
+        <transaction-categories
+            (ChangeSelectedTransactionCategories)="onChangedSelectedTransactionCategories($event)"
+            [Categories]="TransactionCategories"
+        ></transaction-categories>
     </div>
 
-    <div class="filter-container">
-        <ng-container *ngIf="TransactionCategoryOptions.length > 0">
-            <transaction-category-options
-                (ChangeSelectedTransactionCategoryOptions)="onChangedSelectedTransactionCategoryOptions($event)"
-                [CategoryOptions]="TransactionCategoryOptions"
-            ></transaction-category-options>
-        </ng-container>
+    <div
+        *ngIf="TransactionCategoryOptions.length > 0"
+        class="filter-container"
+    >
+        <transaction-category-options
+            (ChangeSelectedTransactionCategoryOptions)="onChangedSelectedTransactionCategoryOptions($event)"
+            [CategoryOptions]="TransactionCategoryOptions"
+        ></transaction-category-options>
     </div>
 
-    <div class="filter-container">
-        <ng-container *ngIf="TransactionSubCategories.length > 0">
-            <transaction-subcategories
-                (ChangeSelectedTransactionSubCategories)="onChangedSelectedTransactionSubCategories($event)"
-                [SubCategories]="TransactionSubCategories"
-            ></transaction-subcategories>
-        </ng-container>
+    <div
+        *ngIf="TransactionSubCategories.length > 0"
+        class="filter-container"
+    >
+        <transaction-subcategories
+            (ChangeSelectedTransactionSubCategories)="onChangedSelectedTransactionSubCategories($event)"
+            [SubCategories]="TransactionSubCategories"
+        ></transaction-subcategories>
     </div>
 
-    <div class="filter-container">
-        <ng-container *ngIf="TransactionSubCategoryFirstOptions.length > 0">
-            <transaction-subcategory-first-options
-                (ChangeSelectedTransactionSubCategoryFirstOptions)="onChangedSelectedTransactionSubCategoryFirstOptions($event)"
-                [SubCategoryFirstOptions]="TransactionSubCategoryFirstOptions"
-            ></transaction-subcategory-first-options>
-        </ng-container>
+    <div
+        *ngIf="TransactionSubCategoryFirstOptions.length > 0"
+        class="filter-container"
+    >
+        <transaction-subcategory-first-options
+            (ChangeSelectedTransactionSubCategoryFirstOptions)="onChangedSelectedTransactionSubCategoryFirstOptions($event)"
+            [SubCategoryFirstOptions]="TransactionSubCategoryFirstOptions"
+        ></transaction-subcategory-first-options>
     </div>
 
-    <div class="filter-container">
-        <ng-container *ngIf="TransactionSubCategorySecondOptions.length > 0">
-            <transaction-subcategory-second-options
-                (ChangeSelectedTransactionSubCategorySecondOptions)="onChangedSelectedTransactionSubCategorySecondOptions($event)"
-                [SubCategorySecondOptions]="TransactionSubCategorySecondOptions"
-            ></transaction-subcategory-second-options>
-        </ng-container>
+    <div
+        *ngIf="TransactionSubCategorySecondOptions.length > 0"
+        class="filter-container"
+    >
+        <transaction-subcategory-second-options
+            (ChangeSelectedTransactionSubCategorySecondOptions)="onChangedSelectedTransactionSubCategorySecondOptions($event)"
+            [SubCategorySecondOptions]="TransactionSubCategorySecondOptions"
+        ></transaction-subcategory-second-options>
     </div>
 </div>

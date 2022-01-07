@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import * as _ from 'lodash';
 
@@ -10,12 +10,15 @@ import { TransactionSubCategory } from 'src/models';
     styleUrls: ['./transaction-subcategories.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TransactionSubcategoriesComponent implements OnInit {
-    private form: FormGroup;
+export class TransactionSubcategoriesComponent {
+    private form!: FormGroup;
     private subCategories: TransactionSubCategory[] = [];
 
     get Form(): FormGroup {
         return this.form;
+    }
+    set Form(value: FormGroup) {
+        this.form = value;
     }
 
     @Output()
@@ -31,9 +34,14 @@ export class TransactionSubcategoriesComponent implements OnInit {
     }
 
     constructor(private readonly formBuilder: FormBuilder) {
-        this.form = this.formBuilder.group({
-            subCategories: new FormControl('')
-        });
+        this.updateForm();
+
+        this.Form.valueChanges
+            .subscribe(() => {
+                if (this.Form.valid) {
+                    this.ChangeSelectedTransactionSubCategories.emit(this.Form.value.subCategories)
+                }
+            });
     }
 
     public compareSubCategories(t1: TransactionSubCategory, t2: TransactionSubCategory) {
@@ -44,13 +52,10 @@ export class TransactionSubcategoriesComponent implements OnInit {
         return t1.Id === t2.Id;
     }
 
-    public ngOnInit(): void {
-        this.Form.valueChanges
-            .subscribe(() => {
-                if (this.Form.valid) {
-                    this.ChangeSelectedTransactionSubCategories.emit(this.Form.value.subCategories)
-                }
-            });
+    private updateForm(): void {
+        this.Form = this.formBuilder.group({
+            subCategories: new FormControl('')
+        });
     }
 
     private setSelectedFormValues(): void {

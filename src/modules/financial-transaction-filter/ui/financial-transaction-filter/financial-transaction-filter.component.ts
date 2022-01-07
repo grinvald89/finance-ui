@@ -1,20 +1,8 @@
 import { Component, ChangeDetectionStrategy, OnInit, ChangeDetectorRef } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import * as _ from 'lodash';
 
 import { TransactionCategory, TransactionCategoryOption, TransactionStatus, TransactionSubCategory, TransactionSubCategoryFirstOption, TransactionSubCategorySecondOption, TransactionType, User } from 'src/models';
 import { FinancialTransactionFilterFacade, Period } from '../../core';
-
-interface Pokemon {
-    value: string;
-    viewValue: string;
-}
-
-interface PokemonGroup {
-    disabled?: boolean;
-    name: string;
-    pokemon: Pokemon[];
-}
 
 @Component({
     selector: 'financial-transaction-filter',
@@ -23,9 +11,6 @@ interface PokemonGroup {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FinancialTransactionFilterComponent implements OnInit {
-    // (ChangeSelectedTransactionSubCategoryFirstOptions)="ChangeSelectedTransactionSubCategoryFirstOptions($event)"
-    // [SubCategoryFirstOptions]="TransactionSubCategoryFirstOptions"
-
     private transactionCategories: TransactionCategory[] = [];
     private transactionCategoryOptions: TransactionCategoryOption[] = [];
     private transactionStatuses: TransactionStatus[] = [];
@@ -173,40 +158,4 @@ export class FinancialTransactionFilterComponent implements OnInit {
     public onChangedSelectedPeriod(selectedPeriod: Period): void {
         console.log(selectedPeriod);
     }
-
-    pokemonControl = new FormControl();
-    pokemonGroups: PokemonGroup[] = [
-        {
-            name: 'Grass',
-            pokemon: [
-                { value: 'bulbasaur-0', viewValue: 'Bulbasaur' },
-                { value: 'oddish-1', viewValue: 'Oddish' },
-                { value: 'bellsprout-2', viewValue: 'Bellsprout' },
-            ],
-        },
-        {
-            name: 'Water',
-            pokemon: [
-                { value: 'squirtle-3', viewValue: 'Squirtle' },
-                { value: 'psyduck-4', viewValue: 'Psyduck' },
-                { value: 'horsea-5', viewValue: 'Horsea' },
-            ],
-        },
-        {
-            name: 'Fire',
-            disabled: true,
-            pokemon: [
-                { value: 'charmander-6', viewValue: 'Charmander' },
-                { value: 'vulpix-7', viewValue: 'Vulpix' },
-                { value: 'flareon-8', viewValue: 'Flareon' },
-            ],
-        },
-        {
-            name: 'Psychic',
-            pokemon: [
-                { value: 'mew-9', viewValue: 'Mew' },
-                { value: 'mewtwo-10', viewValue: 'Mewtwo' },
-            ],
-        },
-    ];
 }

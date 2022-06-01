@@ -2,9 +2,12 @@
     [formGroup]="Form"
     class="form"
 >
-    <mat-form-field appearance="fill">
+    <mat-form-field
+        appearance="fill"
+        class="form-field"
+    >
         <mat-label>
-            Категория операции
+            Категории операции
         </mat-label>
         <mat-select
             multiple
@@ -12,7 +15,7 @@
             [compareWith]="compareCategories"
         >
             <mat-option
-                *ngFor="let category of Categories"
+                *ngFor="let category of CategoriesByDirections"
                 [value]="category"
             >
                 {{ category.Name }}

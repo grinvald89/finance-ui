@@ -1,7 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { TransactionCategory, TransactionCategoryOption, TransactionStatus, TransactionSubCategory, TransactionSubCategoryFirstOption, TransactionSubCategorySecondOption, TransactionType, User } from 'src/models';
+import {
+    TransactionCategory,
+    TransactionDirection,
+    TransactionStatus,
+    TransactionTag,
+    TransactionType,
+    User
+} from 'src/models';
 import { FinancialTransactionFilterRepository } from '../data';
 
 @Injectable({
@@ -10,32 +17,24 @@ import { FinancialTransactionFilterRepository } from '../data';
 export class FinancialTransactionFilterFacade {
     constructor(private readonly filterRepository: FinancialTransactionFilterRepository) { }
 
-    public getTransactionCategories(): Observable<TransactionCategory[]> {
-        return this.filterRepository.getTransactionCategories();
+    public getTransactionDirections(): Observable<TransactionDirection[]> {
+        return this.filterRepository.getTransactionDirections();
     }
 
-    public getTransactionCategoryOptions(): Observable<TransactionCategoryOption[]> {
-        return this.filterRepository.getTransactionCategoryOptions();
+    public getTransactionCategories(): Observable<TransactionCategory[]> {
+        return this.filterRepository.getTransactionCategories();
     }
 
     public getTransactionStatuses(): Observable<TransactionStatus[]> {
         return this.filterRepository.getTransactionStatuses();
     }
 
-    public getTransactionSubCategories(): Observable<TransactionSubCategory[]> {
-        return this.filterRepository.getTransactionSubCategories();
-    }
-
-    public getTransactionSubCategoryFirstOptions(): Observable<TransactionSubCategoryFirstOption[]> {
-        return this.filterRepository.getTransactionSubCategoryFirstOptions();
-    }
-
-    public getTransactionSubCategorySecondOptions(): Observable<TransactionSubCategorySecondOption[]> {
-        return this.filterRepository.getTransactionSubCategorySecondOptions();
-    }
-
     public getTransactionTypes(): Observable<TransactionType[]> {
         return this.filterRepository.getTransactionTypes();
+    }
+
+    public getTransactionTags(): Observable<TransactionTag[]> {
+        return this.filterRepository.getTransactionTags();
     }
 
     public getUsers(): Observable<User[]> {

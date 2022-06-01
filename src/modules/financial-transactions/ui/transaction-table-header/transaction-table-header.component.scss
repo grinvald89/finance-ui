@@ -1,0 +1,42 @@
+.transactions-table {
+    width: 100%;
+}
+
+.mat-column-summ {
+    min-width: 110px;
+    max-width: 110px;
+}
+
+.mat-column-status {
+    min-width: 24px;
+    max-width: 24px;
+}
+
+.mat-column-type {
+    min-width: 24px;
+    max-width: 24px;
+}
+
+.mat-column-payer {
+    min-width: 150px;
+    max-width: 150px;
+}
+
+.mat-column-direction {
+    min-width: 150px;
+    max-width: 150px;
+}
+
+.mat-column-category {
+    min-width: 150px;
+    max-width: 150px;
+}
+
+.mat-column-tags {
+    min-width: 150px;
+    max-width: 150px;
+}
+
+.mat-header-cell, .mat-cell {
+    padding-left: 24px;
+}

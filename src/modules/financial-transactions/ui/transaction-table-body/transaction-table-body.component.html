@@ -1,0 +1,57 @@
+<mat-table [dataSource]="Transactions" class="mat-elevation-z8">
+    <ng-container matColumnDef="summ">
+        <mat-cell mat-cell *matCellDef="let element"> {{ element.Summ | cost }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+        <mat-cell mat-cell *matCellDef="let element">
+            <mat-icon class="transaction-status" [matTooltip]="element.Status.Name" [ngSwitch]="element.Status.Id">
+                <span class="transaction-status__done" *ngSwitchCase="'a20ad6f6-5bf1-4212-8d94-077c875aea02'">task_alt</span>
+                <span class="transaction-status__plan" *ngSwitchCase="'0930dd63-9ded-40a3-a985-868f797cbda3'">post_add</span>
+            </mat-icon>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="type">
+        <mat-cell mat-cell *matCellDef="let element">
+            <mat-icon class="transaction-type" [matTooltip]="element.Type.Name" [ngSwitch]="element.Type.Id">
+                <span class="transaction-type__refill" *ngSwitchCase="'c8a5767f-b8b8-4b4b-a633-88656925d700'">north</span>
+                <span class="transaction-type__expense" *ngSwitchCase="'d0d09615-9b0c-4b72-ab61-1810eada9ecd'">south</span>
+            </mat-icon>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="payer">
+        <mat-cell mat-cell *matCellDef="let element"> {{ element.Payer.FullName | fullname }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="direction">
+        <mat-cell mat-cell *matCellDef="let element"> {{ element.Direction.Name }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="category">
+        <mat-cell mat-cell *matCellDef="let element"> {{ element.Category.Name }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="tags">
+        <mat-cell mat-cell *matCellDef="let element">
+            <span class="transaction-tag" *ngFor="let tag of element.Tags; let first = first;">
+                <ng-container *ngIf="!first">, </ng-container>#{{ tag.Name }}
+            </span>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="comment">
+        <mat-cell mat-cell *matCellDef="let element"> {{ element.Comment }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="clone-btn">
+        <mat-cell mat-cell *matCellDef="let element">
+            <mat-icon class="transaction-clone-btn" matTooltip="Клонировать операцию" (click)="cloneTransaction($event, element)">
+                content_copy
+            </mat-icon>
+        </mat-cell>
+    </ng-container>
+  
+    <mat-row matRipple *matRowDef="let row; columns: displayedColumns;" (click)="openTransactionEditor(row)"></mat-row>
+</mat-table>

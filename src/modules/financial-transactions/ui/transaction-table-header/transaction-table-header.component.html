@@ -1,0 +1,35 @@
+<mat-table [dataSource]="Transactions" class="mat-elevation-z8">
+    <ng-container matColumnDef="summ">
+        <mat-header-cell mat-header-cell *matHeaderCellDef> Сумма </mat-header-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+        <mat-header-cell mat-header-cell *matHeaderCellDef> Статус </mat-header-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="type">
+        <mat-header-cell mat-header-cell *matHeaderCellDef> Тип </mat-header-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="payer">
+        <mat-header-cell mat-header-cell *matHeaderCellDef> Плательщик </mat-header-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="direction">
+        <mat-header-cell mat-header-cell *matHeaderCellDef> Направление </mat-header-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="category">
+        <mat-header-cell mat-header-cell *matHeaderCellDef> Категория </mat-header-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="tags">
+        <mat-header-cell mat-header-cell *matHeaderCellDef> Теги </mat-header-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="comment">
+        <mat-header-cell mat-header-cell *matHeaderCellDef> Комментарий </mat-header-cell>
+    </ng-container>
+  
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+</mat-table>

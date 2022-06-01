@@ -1,0 +1,25 @@
+<div
+    [formGroup]="Form"
+    class="form"
+>
+    <mat-form-field
+        appearance="fill"
+        class="form-field"
+    >
+        <mat-label>
+            Направление операции
+        </mat-label>
+        <mat-select
+            multiple
+            formControlName="directions"
+            [compareWith]="compareDirections"
+        >
+            <mat-option
+                *ngFor="let direction of Directions"
+                [value]="direction"
+            >
+                {{ direction.Name }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>

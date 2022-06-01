@@ -1,0 +1,118 @@
+<h1 mat-dialog-title>
+    {{ Transaction.Id ? 'Редактирование ' : 'Создание ' }} операции
+</h1>
+
+<div
+    [formGroup]="Form"
+    class="form"
+>
+    <mat-form-field appearance="fill" class="form__field">
+        <mat-label>Дата</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="date">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="form__field">
+        <mat-label>Сумма</mat-label>
+        <input matInput type="number" formControlName="summ">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="form__field">
+        <mat-label>
+            Статус
+        </mat-label>
+        <mat-select formControlName="status">
+            <mat-option
+                *ngFor="let status of Statuses"
+                [value]="status"
+            >
+                {{ status.Name }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="form__field">
+        <mat-label>
+            Тип
+        </mat-label>
+        <mat-select formControlName="type">
+            <mat-option
+                *ngFor="let type of Types"
+                [value]="type"
+            >
+                {{ type.Name }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="form__field">
+        <mat-label>
+            Плательщик
+        </mat-label>
+        <mat-select formControlName="payer">
+            <mat-option
+                *ngFor="let payer of Payers"
+                [value]="payer"
+            >
+                {{ payer.FullName | fullname }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="form__field">
+        <mat-label>
+            Направление
+        </mat-label>
+        <mat-select formControlName="direction">
+            <mat-option
+                *ngFor="let direction of Directions"
+                [value]="direction"
+            >
+                {{ direction.Name }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="form__field">
+        <mat-label>
+            Категория
+        </mat-label>
+        <mat-select formControlName="category">
+            <mat-option
+                *ngFor="let category of Categories"
+                [value]="category"
+            >
+                {{ category.Name }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="form__field">
+        <mat-label>
+            Теги
+        </mat-label>
+        <mat-select
+            multiple
+            formControlName="tags"
+            [compareWith]="compareTags"
+        >
+            <mat-option
+                *ngFor="let tag of Tags"
+                [value]="tag"
+            >
+                {{ tag.Name }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="form__field">
+        <mat-label>Комментарий</mat-label>
+        <input matInput formControlName="comment">
+    </mat-form-field>
+</div>
+
+<div mat-dialog-actions>
+    <button mat-button (click)="close()">Закрыть</button>
+    <button mat-button (click)="submit()" cdkFocusInitial>Сохранить</button>
+</div>

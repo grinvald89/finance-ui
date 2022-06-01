@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import * as _ from 'lodash';
 
@@ -7,11 +7,14 @@ import { TransactionType } from 'src/models';
 @Component({
     selector: 'transaction-types',
     templateUrl: './transaction-types.component.html',
-    styleUrls: ['./transaction-types.component.scss'],
+    styleUrls: [
+        './transaction-types.component.scss',
+        '../styles/fields.scss'
+    ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TransactionTypesComponent implements OnInit {
-    private form: FormGroup;
+export class TransactionTypesComponent {
+    private form!: FormGroup;
     private types: TransactionType[] = [];
 
     get Form(): FormGroup {
@@ -31,9 +34,7 @@ export class TransactionTypesComponent implements OnInit {
     }
 
     constructor(private readonly formBuilder: FormBuilder) {
-        this.form = this.formBuilder.group({
-            types: new FormControl('')
-        });
+        this.createForm();
     }
 
     public compareTypes(t1: TransactionType, t2: TransactionType) {
@@ -44,7 +45,11 @@ export class TransactionTypesComponent implements OnInit {
         return t1.Id === t2.Id;
     }
 
-    public ngOnInit(): void {
+    private createForm(): void {
+        this.form = this.formBuilder.group({
+            types: new FormControl('')
+        });
+
         this.Form.valueChanges
             .subscribe(() => {
                 if (this.Form.valid) {

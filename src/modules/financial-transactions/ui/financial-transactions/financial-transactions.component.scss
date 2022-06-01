@@ -1,0 +1,26 @@
+:host {
+    box-sizing: border-box;
+    overflow: auto;
+    padding: 0 12px;
+}
+
+.transaction-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.group-date {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &__add-btn {
+        margin-right: 10px;
+    }
+
+    &__text {
+        font-size: 18px;
+        padding: 15px 0;
+        text-align: center;
+    }
+}

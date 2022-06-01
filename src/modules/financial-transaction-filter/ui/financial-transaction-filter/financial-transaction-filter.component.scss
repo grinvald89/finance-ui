@@ -1,6 +1,11 @@
+@import './styles/variables.scss';
+
 .filters {
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-around;
+    background: #3f51b5;
+    padding: 12px 0;
 }
 
 .filter-container {
@@ -8,5 +13,16 @@
 
     &:last-child {
         margin-right: 0;
+    }
+}
+
+@media (max-width: $mobile-width) {
+    .filter-container {
+        margin: 10px 24px;
+        width: 100%;
+
+        &:last-child {
+            margin-right: 24px;
+        }
     }
 }

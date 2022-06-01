@@ -1,17 +1,26 @@
-import { Component, ChangeDetectionStrategy, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 
 import {
+    TransactionDirection,
     TransactionCategory,
-    TransactionCategoryOption,
     TransactionStatus,
-    TransactionSubCategory,
-    TransactionSubCategoryFirstOption,
-    TransactionSubCategorySecondOption,
+    TransactionTag,
     TransactionType,
-    User
+    User,
+    ITransactionFilter,
+    IPeriod
 } from 'src/models';
-import { FinancialTransactionFilterFacade, Period } from '../../core';
+import { FinancialTransactionFilterFacade } from '../../core';
+
+interface IFilterInitStatus {
+    categories: boolean;
+    directions: boolean;
+    payers: boolean;
+    statuses: boolean;
+    tags: boolean;
+    types: boolean;
+}
 
 @Component({
     selector: 'financial-transaction-filter',
@@ -20,103 +29,97 @@ import { FinancialTransactionFilterFacade, Period } from '../../core';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FinancialTransactionFilterComponent implements OnInit {
-    private isTransactionCategoriesLoaded = false;
-    private isTransactionCategoryOptionsLoaded = false;
-    private isTransactionSubCategoriesLoaded = false;
-    private isTransactionSubCategoryFirstOptionsLoaded = false;
-    private isTransactionSubCategorySecondOptionsLoaded = false;
-    private allTransactionCategoryOptions: TransactionCategoryOption[] = [];
-    private allTransactionSubCategories: TransactionSubCategory[] = [];
-    private allTransactionSubCategoryFirstOptions: TransactionSubCategoryFirstOption[] = [];
-    private allTransactionSubCategorySecondOptions: TransactionSubCategorySecondOption[] = [];
-    private transactionCategories: TransactionCategory[] = [];
-    private transactionCategoryOptions: TransactionCategoryOption[] = [];
-    private transactionStatuses: TransactionStatus[] = [];
-    private transactionSubCategories: TransactionSubCategory[] = [];
-    private transactionSubCategoryFirstOptions: TransactionSubCategoryFirstOption[] = [];
-    private transactionSubCategorySecondOptions: TransactionSubCategorySecondOption[] = [];
-    private transactionTypes: TransactionType[] = [];
-    private users: User[] = [];
+    @Output() UpdateTransactionFilter: EventEmitter<ITransactionFilter> = new EventEmitter<ITransactionFilter>();
 
-    private selectedPeriod!: Period;
+    private filterInitStatus: IFilterInitStatus = {
+        categories: false,
+        directions: false,
+        payers: false,
+        statuses: false,
+        tags: false,
+        types: false
+    };
+
+    private isTransactionDirectionsLoaded = false;
+    private isTransactionCategoriesLoaded = false;
+    private isTransactionStatusesLoaded = false;
+    private isTransactionTypesLoaded = false;
+    private isTransactionTagsLoaded = false;
+
+    private allTransactionDirections: TransactionDirection[] = [];
+    private allTransactionCategories: TransactionCategory[] = [];
+    private allTransactionStatuses: TransactionStatus[] = [];
+    private allTransactionTypes: TransactionType[] = [];
+    private allTransactionTags: TransactionTag[] = [];
+    private allUsers: User[] = [];
+
+    private selectedPeriod!: IPeriod;
+    private selectedTransactionDirections: TransactionDirection[] = [];
     private selectedTransactionCategories: TransactionCategory[] = [];
-    private selectedTransactionCategoryOptions: TransactionCategoryOption[] = [];
     private selectedTransactionStatuses: TransactionStatus[] = [];
-    private selectedTransactionSubCategories: TransactionSubCategory[] = [];
-    private selectedTransactionSubCategoryFirstOptions: TransactionSubCategoryFirstOption[] = [];
-    private selectedTransactionSubCategorySecondOptions: TransactionSubCategorySecondOption[] = [];
     private selectedTransactionTypes: TransactionType[] = [];
+    private selectedTransactionTags: TransactionTag[] = [];
     private selectedUsers: User[] = [];
 
+    get SelectedTransactionDirections(): TransactionDirection[] {
+        return this.selectedTransactionDirections;
+    }
+    set SelectedTransactionDirections(value: TransactionDirection[]) {
+        this.selectedTransactionDirections = value;
+        this.changeDetector.detectChanges();
+    }
+
+    get TransactionDirections(): TransactionDirection[] {
+        return this.allTransactionDirections;
+    }
+    set TransactionDirections(value: TransactionDirection[]) {
+        this.allTransactionDirections = value;
+        this.SelectedTransactionDirections = [];
+        this.changeDetector.detectChanges();
+    }
+
     get TransactionCategories(): TransactionCategory[] {
-        return this.transactionCategories;
+        return this.allTransactionCategories;
     }
     set TransactionCategories(value: TransactionCategory[]) {
-        this.transactionCategories = value;
+        this.allTransactionCategories = value;
         this.selectedTransactionCategories = [];
         this.changeDetector.detectChanges();
     }
 
-    get TransactionCategoryOptions(): TransactionCategoryOption[] {
-        return this.transactionCategoryOptions;
-    }
-    set TransactionCategoryOptions(value: TransactionCategoryOption[]) {
-        this.transactionCategoryOptions = value;
-        this.selectedTransactionCategoryOptions = [];
-        this.changeDetector.detectChanges();
-    }
-
     get TransactionStatuses(): TransactionStatus[] {
-        return this.transactionStatuses;
+        return this.allTransactionStatuses;
     }
     set TransactionStatuses(value: TransactionStatus[]) {
-        this.transactionStatuses = value;
+        this.allTransactionStatuses = value;
         this.selectedTransactionStatuses = [];
         this.changeDetector.detectChanges();
     }
 
-    get TransactionSubCategories(): TransactionSubCategory[] {
-        return this.transactionSubCategories;
-    }
-    set TransactionSubCategories(value: TransactionSubCategory[]) {
-        this.transactionSubCategories = value;
-        this.selectedTransactionSubCategories = [];
-        this.changeDetector.detectChanges();
-    }
-
-    get TransactionSubCategoryFirstOptions(): TransactionSubCategoryFirstOption[] {
-        return this.transactionSubCategoryFirstOptions;
-    }
-    set TransactionSubCategoryFirstOptions(value: TransactionSubCategoryFirstOption[]) {
-        this.transactionSubCategoryFirstOptions = value;
-        this.selectedTransactionSubCategoryFirstOptions = [];
-        this.changeDetector.detectChanges();
-    }
-
-    get TransactionSubCategorySecondOptions(): TransactionSubCategorySecondOption[] {
-        return this.transactionSubCategorySecondOptions;
-    }
-    set TransactionSubCategorySecondOptions(value: TransactionSubCategorySecondOption[]) {
-        this.transactionSubCategorySecondOptions = value;
-        this.selectedTransactionSubCategorySecondOptions = [];
-        this.changeDetector.detectChanges();
-    }
-
     get TransactionTypes(): TransactionType[] {
-        return this.transactionTypes;
+        return this.allTransactionTypes;
     }
     set TransactionTypes(value: TransactionType[]) {
-        this.transactionTypes = value;
+        this.allTransactionTypes = value;
         this.selectedTransactionTypes = [];
+        this.changeDetector.detectChanges();
+    }
+
+    get TransactionTags(): TransactionTag[] {
+        return this.allTransactionTags;
+    }
+    set TransactionTags(value: TransactionTag[]) {
+        this.allTransactionTags = value;
+        this.selectedTransactionTags = [];
         this.changeDetector.detectChanges();
     }
 
     get Users(): User[] {
-        return this.users;
+        return this.allUsers;
     }
     set Users(value: User[]) {
-        this.users = value;
-        this.selectedTransactionTypes = [];
+        this.allUsers = value;
+        this.selectedUsers = [];
         this.changeDetector.detectChanges();
     }
 
@@ -126,247 +129,116 @@ export class FinancialTransactionFilterComponent implements OnInit {
     ) { }
 
     public ngOnInit(): void {
+        this.facade.getTransactionDirections()
+            .subscribe((transactionDirections: TransactionDirection[]): void => {
+                this.isTransactionDirectionsLoaded = true;
+                this.TransactionDirections = transactionDirections;
+                localStorage.setItem('transaction-directions', JSON.stringify(transactionDirections));
+            });
+
         this.facade.getTransactionCategories()
             .subscribe((transactionCategories: TransactionCategory[]): void => {
                 this.isTransactionCategoriesLoaded = true;
                 this.TransactionCategories = transactionCategories;
-            });
-
-        this.facade.getTransactionCategoryOptions()
-            .subscribe((transactionCategoryOptions: TransactionCategoryOption[]): void => {
-                this.isTransactionCategoryOptionsLoaded = true;
-                this.allTransactionCategoryOptions = transactionCategoryOptions;
-                this.updateTransactionCategoryOptions();
+                localStorage.setItem('transaction-categories', JSON.stringify(transactionCategories));
             });
 
         this.facade.getTransactionStatuses()
-            .subscribe((transactionStatuses: TransactionStatus[]): TransactionStatus[] =>
-                this.TransactionStatuses = transactionStatuses);
-
-        this.facade.getTransactionSubCategories()
-            .subscribe((transactionSubCategories: TransactionSubCategory[]): void => {
-                this.isTransactionSubCategoriesLoaded = true;
-                this.allTransactionSubCategories = transactionSubCategories;
-                this.updateTransactionSubCategories();
-            });
-
-        this.facade.getTransactionSubCategoryFirstOptions()
-            .subscribe((transactionSubCategoryFirstOptions: TransactionSubCategoryFirstOption[]): void => {
-                this.isTransactionSubCategoryFirstOptionsLoaded = true;
-                this.allTransactionSubCategoryFirstOptions = transactionSubCategoryFirstOptions;
-                this.updateTransactionSubCategoryFirstOptions();
-            });
-
-        this.facade.getTransactionSubCategorySecondOptions()
-            .subscribe((transactionSubCategorySecondOptions: TransactionSubCategorySecondOption[]): void => {
-                this.isTransactionSubCategorySecondOptionsLoaded = true;
-                this.TransactionSubCategorySecondOptions = transactionSubCategorySecondOptions;
-                this.updateTransactionSubCategorySecondOptions();
+            .subscribe((transactionStatuses: TransactionStatus[]): void => {
+                this.isTransactionStatusesLoaded = true;
+                this.TransactionStatuses = transactionStatuses;
+                localStorage.setItem('transaction-statuses', JSON.stringify(transactionStatuses));
             });
 
         this.facade.getTransactionTypes()
-            .subscribe((transactionTypes: TransactionType[]): TransactionType[] =>
-                this.TransactionTypes = transactionTypes);
+            .subscribe((transactionTypes: TransactionType[]): void => {
+                this.isTransactionTypesLoaded = true;
+                this.TransactionTypes = transactionTypes;
+                localStorage.setItem('transaction-types', JSON.stringify(transactionTypes));
+            });
+
+        this.facade.getTransactionTags()
+            .subscribe((transactionTags: TransactionTag[]): void => {
+                this.isTransactionTagsLoaded = true;
+                this.allTransactionTags = transactionTags;
+                localStorage.setItem('transaction-tags', JSON.stringify(transactionTags));
+            });
 
         this.facade.getUsers()
-            .subscribe((users: User[]): User[] =>
-                this.Users = users);
+            .subscribe((users: User[]): void => {
+                this.Users = users;
+                localStorage.setItem('payers', JSON.stringify(users));
+            });
     }
 
-    public onChangedSelectedPeriod(selectedPeriod: Period): void {
+    public onChangedSelectedPeriod(selectedPeriod: IPeriod): void {
         this.selectedPeriod = selectedPeriod;
+        this.updateTransactions();
+    }
+
+    public onChangedSelectedTransactionDirections(selectedTransactionDirections: TransactionDirection[]): void {
+        this.SelectedTransactionDirections = selectedTransactionDirections;
+        this.filterInitStatus.directions = true;
+        this.updateTransactions();
     }
 
     public onChangedSelectedTransactionCategories(selectedTransactionCategories: TransactionCategory[]): void {
         this.selectedTransactionCategories = selectedTransactionCategories;
-        this.updateTransactionCategoryOptions();
-    }
-
-    public onChangedSelectedTransactionCategoryOptions(selectedTransactionCategoryOptions: TransactionCategoryOption[]): void {
-        this.selectedTransactionCategoryOptions = selectedTransactionCategoryOptions;
-        this.updateTransactionSubCategories();
+        this.filterInitStatus.categories = true;
+        this.updateTransactions();
     }
 
     public onChangedSelectedTransactionStatuses(selectedTransactionStatuses: TransactionStatus[]): void {
         this.selectedTransactionStatuses = selectedTransactionStatuses;
-    }
-
-    public onChangedSelectedTransactionSubCategories(selectedTransactionSubCategories: TransactionSubCategory[]): void {
-        this.selectedTransactionSubCategories = selectedTransactionSubCategories;
-        this.updateTransactionSubCategoryFirstOptions();
-    }
-
-    public onChangedSelectedTransactionSubCategoryFirstOptions(selectedTransactionSubCategoryFirstOptions: TransactionSubCategoryFirstOption[]): void {
-        this.selectedTransactionSubCategoryFirstOptions = selectedTransactionSubCategoryFirstOptions;
-        this.updateTransactionSubCategorySecondOptions();
-    }
-
-    public onChangedSelectedTransactionSubCategorySecondOptions(selectedTransactionSubCategorySecondOptions: TransactionSubCategorySecondOption[]): void {
-        this.selectedTransactionSubCategorySecondOptions = selectedTransactionSubCategorySecondOptions;
+        this.filterInitStatus.statuses = true;
+        this.updateTransactions();
     }
 
     public onChangedSelectedTransactionTypes(selectedTransactionTypes: TransactionType[]): void {
         this.selectedTransactionTypes = selectedTransactionTypes;
+        this.filterInitStatus.types = true;        
+        this.updateTransactions();
+    }
+
+    public onChangedSelectedTransactionTags(selectedTransactionTags: TransactionTag[]): void {
+        this.selectedTransactionTags = selectedTransactionTags;
+        this.filterInitStatus.tags = true;
+        this.updateTransactions();
     }
 
     public onChangedSelectedUsers(selectedUsers: User[]): void {
         this.selectedUsers = selectedUsers;
+        this.filterInitStatus.payers = true;
+        this.updateTransactions();
     }
 
-    private updateTransactionCategoryOptions() {
-        if (this.isTransactionCategoriesLoaded && this.isTransactionCategoryOptionsLoaded) {
-            let transactionCategoryOptions: TransactionCategoryOption[] = [];
-
-            _.forEach(this.selectedTransactionCategories, (category: TransactionCategory): void => {
-                const options: TransactionCategoryOption[] =
-                    _.filter(
-                        _.cloneDeep(this.allTransactionCategoryOptions),
-                        (option: TransactionCategoryOption): boolean => option.CategoryId === category.Id
-                    );
-
-                transactionCategoryOptions = _.concat(transactionCategoryOptions, options);
-            });
-
-            this.TransactionCategoryOptions = transactionCategoryOptions;
-
-            this.updateTransactionSubCategories();
+    private updateTransactions(): void {
+        if (!this.isFilterInitialized()) {
+            return;
         }
+
+        const filter: ITransactionFilter = {
+            categoryIds: _.map(this.selectedTransactionCategories, (item: TransactionCategory): string => item.Id),
+            directionIds: _.map(this.selectedTransactionDirections, (item: TransactionDirection): string => item.Id),
+            payerIds: _.map(this.selectedUsers, (item: User): string => item.Id),
+            period: this.selectedPeriod,
+            statusIds: _.map(this.selectedTransactionStatuses, (item: TransactionStatus): string => item.Id),
+            tagIds: _.map(this.selectedTransactionTags, (item: TransactionTag): string => item.Id),
+            typeIds: _.map(this.selectedTransactionTypes, (item: TransactionType): string => item.Id)
+        };
+
+        this.UpdateTransactionFilter.emit(filter);
     }
 
-    private updateTransactionSubCategories(): void {
-        if (
-            this.isTransactionCategoriesLoaded &&
-            this.isTransactionCategoryOptionsLoaded &&
-            this.isTransactionSubCategoriesLoaded
-        ) {
-            const categoriesWithOptions: TransactionCategory[] = [];
-            const categoriesWithOutOptions: TransactionCategory[] = [];
+    private isFilterInitialized(): boolean {
+        for (const prop in this.filterInitStatus) {
+            const isPropExist: boolean = this.filterInitStatus.hasOwnProperty(prop);
 
-            _.forEach(this.selectedTransactionCategories, (category: TransactionCategory): void => {
-                const isCategoryWithOptions: boolean = _.filter(
-                    this.allTransactionCategoryOptions,
-                    (option: TransactionCategoryOption): boolean => option.CategoryId === category.Id
-                ).length > 0;
-
-                if (isCategoryWithOptions) {
-                    categoriesWithOptions.push(category);
-                } else {
-                    categoriesWithOutOptions.push(category);
-                }
-            });
-
-            let transactionSubCategories: TransactionSubCategory[] = [];
-
-            _.forEach(categoriesWithOutOptions, (category: TransactionCategory): void => {
-                const subCategories: TransactionSubCategory[] = _.filter(
-                    this.allTransactionSubCategories,
-                    (subCategory: TransactionSubCategory): boolean => subCategory.CategoryId === category.Id
-                );
-
-                transactionSubCategories = _.concat(transactionSubCategories, subCategories);
-            });
-
-            _.forEach(categoriesWithOptions, (category: TransactionCategory): void => {
-                const options: TransactionCategoryOption[] = _.filter(
-                    this.selectedTransactionCategoryOptions,
-                    (option: TransactionCategoryOption): boolean => option.CategoryId === category.Id
-                );
-
-                _.forEach(options, (option: TransactionCategoryOption): void => {
-                    const subCategories: TransactionSubCategory[] = _.filter(
-                        this.allTransactionSubCategories,
-                        (subCategory: TransactionSubCategory): boolean => subCategory.CategoryId === category.Id && subCategory.CategoryOptionId === option.Id
-                    );
-
-                    transactionSubCategories = _.concat(transactionSubCategories, subCategories);
-                });
-            });
-
-            this.TransactionSubCategories = transactionSubCategories;
-
-            this.updateTransactionSubCategoryFirstOptions();
+            if (isPropExist && !(this.filterInitStatus as any)[prop]) {
+                return false;
+            }
         }
-    }
 
-    private updateTransactionSubCategoryFirstOptions(): void {
-        if (
-            this.isTransactionCategoriesLoaded &&
-            this.isTransactionCategoryOptionsLoaded &&
-            this.isTransactionSubCategoriesLoaded &&
-            this.isTransactionSubCategoryFirstOptionsLoaded
-        ) {
-            let transactionSubCategoryFirstOptions: TransactionSubCategoryFirstOption[] = [];
-
-            _.forEach(this.selectedTransactionSubCategories, (subCategory: TransactionSubCategory): void => {
-                const firstOptions: TransactionSubCategoryFirstOption[] =
-                    _.filter(
-                        _.cloneDeep(this.allTransactionSubCategoryFirstOptions),
-                        (option: TransactionSubCategoryFirstOption): boolean => option.SubCategoryId === subCategory.Id
-                    );
-
-                    transactionSubCategoryFirstOptions = _.concat(transactionSubCategoryFirstOptions, firstOptions);
-            });
-
-            this.TransactionSubCategoryFirstOptions = transactionSubCategoryFirstOptions;
-
-            this.updateTransactionSubCategorySecondOptions();
-        } 
-    }
-
-    private updateTransactionSubCategorySecondOptions(): void {
-        if (
-            this.isTransactionCategoriesLoaded &&
-            this.isTransactionCategoryOptionsLoaded &&
-            this.isTransactionSubCategoriesLoaded &&
-            this.isTransactionSubCategoryFirstOptionsLoaded &&
-            this.isTransactionSubCategorySecondOptionsLoaded
-        ) {
-            const subCategoriesWithFirstOptions: TransactionSubCategory[] = [];
-            const subCategoriesWithOutFirstOptions: TransactionSubCategory[] = [];
-
-            _.forEach(this.selectedTransactionSubCategories, (subCategory: TransactionSubCategory): void => {
-                const isSubCategoryWithFirstOptions: boolean = _.filter(
-                    this.allTransactionSubCategoryFirstOptions,
-                    (firstOption: TransactionSubCategoryFirstOption): boolean => firstOption.SubCategoryId === subCategory.Id
-                ).length > 0;
-
-                if (isSubCategoryWithFirstOptions) {
-                    subCategoriesWithFirstOptions.push(subCategory);
-                } else {
-                    subCategoriesWithOutFirstOptions.push(subCategory);
-                }
-            });
-
-            let transactionSubCategorySecondOptions: TransactionSubCategorySecondOption[] = [];
-
-            _.forEach(subCategoriesWithOutFirstOptions, (subCategory: TransactionSubCategory): void => {
-                const subCategorySecondOptions: TransactionSubCategorySecondOption[] = _.filter(
-                    this.allTransactionSubCategorySecondOptions,
-                    (subCategorySecondOption: TransactionSubCategorySecondOption): boolean =>
-                        subCategorySecondOption.SubCategoryId === subCategory.Id
-                );
-
-                transactionSubCategorySecondOptions = _.concat(transactionSubCategorySecondOptions, subCategorySecondOptions);
-            });
-
-            _.forEach(subCategoriesWithFirstOptions, (subCategory: TransactionSubCategory): void => {
-                const firstOptions: TransactionSubCategoryFirstOption[] = _.filter(
-                    this.selectedTransactionSubCategoryFirstOptions,
-                    (firstOption: TransactionSubCategoryFirstOption): boolean => firstOption.SubCategoryId === subCategory.Id
-                );
-
-                _.forEach(firstOptions, (firstOption: TransactionSubCategoryFirstOption): void => {
-                    const secondOptions: TransactionSubCategorySecondOption[] = _.filter(
-                        this.allTransactionSubCategorySecondOptions,
-                        (secondOption: TransactionSubCategorySecondOption): boolean =>
-                            secondOption.SubCategoryId === subCategory.Id && secondOption.SubCategoryFirstOptionId === firstOption.Id
-                    );
-
-                    transactionSubCategorySecondOptions = _.concat(transactionSubCategorySecondOptions, secondOptions);
-                });
-            });
-
-            this.TransactionSubCategorySecondOptions = transactionSubCategorySecondOptions;
-        }
+        return true;
     }
 }

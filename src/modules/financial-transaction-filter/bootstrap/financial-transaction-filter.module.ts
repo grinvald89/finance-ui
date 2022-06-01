@@ -8,17 +8,15 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 
+import { PipesModule } from '../../pipes/bootstrap/pipes.module';
 import { FinancialTransactionFilterComponent } from '../ui/financial-transaction-filter/financial-transaction-filter.component';
 import { TransactionTypesComponent } from '../ui/financial-transaction-filter/transaction-types/transaction-types.component';
 import { TransactionStatusesComponent } from '../ui/financial-transaction-filter/transaction-statuses/transaction-statuses.component';
-import { UsersComponent } from '../ui/financial-transaction-filter/users/users.component';
-import { FullnamePipe } from '../ui/financial-transaction-filter/users/fullname.pipe';
-import { DatesComponent } from '../ui/financial-transaction-filter/dates/dates.component';
+import { PayersComponent } from '../ui/financial-transaction-filter/payers/payers.component';
+import { PeriodComponent } from '../ui/financial-transaction-filter/period/period.component';
+import { TransactionDirectionsComponent } from '../ui/financial-transaction-filter/transaction-directions/transaction-directions.component';
 import { TransactionCategoriesComponent } from '../ui/financial-transaction-filter/transaction-categories/transaction-categories.component';
-import { TransactionCategoryOptionsComponent } from '../ui/financial-transaction-filter/transaction-category-options/transaction-category-options.component';
-import { TransactionSubcategoriesComponent } from '../ui/financial-transaction-filter/transaction-subcategories/transaction-subcategories.component';
-import { TransactionSubcategoryFirstOptionsComponent } from '../ui/financial-transaction-filter/transaction-subcategory-first-options/transaction-subcategory-first-options.component';
-import { TransactionSubcategorySecondOptionsComponent } from '../ui/financial-transaction-filter/transaction-subcategory-second-options/transaction-subcategory-second-options.component';
+import { TransactionTagsComponent } from '../ui/financial-transaction-filter/transaction-tags/transaction-tags.component';
 
 @NgModule({
     imports: [
@@ -29,20 +27,18 @@ import { TransactionSubcategorySecondOptionsComponent } from '../ui/financial-tr
         MatInputModule,
         MatSelectModule,
         MatDatepickerModule,
-        MatNativeDateModule
+        MatNativeDateModule,
+        PipesModule
     ],
     declarations: [
         FinancialTransactionFilterComponent,
         TransactionTypesComponent,
         TransactionStatusesComponent,
-        UsersComponent,
-        FullnamePipe,
-        DatesComponent,
+        PayersComponent,
+        PeriodComponent,
+        TransactionDirectionsComponent,
         TransactionCategoriesComponent,
-        TransactionCategoryOptionsComponent,
-        TransactionSubcategoriesComponent,
-        TransactionSubcategoryFirstOptionsComponent,
-        TransactionSubcategorySecondOptionsComponent
+        TransactionTagsComponent
     ],
     exports: [FinancialTransactionFilterComponent],
     providers: [

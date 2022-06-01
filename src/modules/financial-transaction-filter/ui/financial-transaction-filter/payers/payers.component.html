@@ -1,0 +1,25 @@
+<div
+    [formGroup]="Form"
+    class="form"
+>
+    <mat-form-field
+        appearance="fill"
+        class="form-field"
+    >
+        <mat-label>
+            Плательщик
+        </mat-label>
+        <mat-select
+            multiple
+            formControlName="payers"
+            [compareWith]="comparePayers"
+        >
+            <mat-option
+                *ngFor="let payer of Payers"
+                [value]="payer"
+            >
+                {{ payer.FullName | fullname }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>

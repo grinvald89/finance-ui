@@ -1,1 +1,30 @@
-<financial-transaction-filter></financial-transaction-filter>
+<div [ngClass]="{
+    'dashboard-container': true,
+    'dashboard-container--only-filter': IsShowFilter
+}">
+    <div
+        (click)="IsShowFilter = !IsShowFilter"
+        class="financial-filter-switcher"
+    >
+        <span class="financial-filter-switcher__text">
+            {{ IsShowFilter ? 'Список транзакций' : 'Фильтр' }}
+        </span>
+        <mat-icon class="financial-filter-switcher__icon">
+            {{ IsShowFilter ? 'view_headline' : 'filter_list'}}
+        </mat-icon>
+    </div>
+
+    <div [ngClass]="{
+        'financial-filter-container': true,
+        'visible': IsShowFilter
+    }">
+        <financial-transaction-filter (UpdateTransactionFilter)="onUpdatedTransactionFilter($event)"></financial-transaction-filter>
+    </div>
+
+    <div [ngClass]="{
+        'financial-transactions-container': true,
+        'visible': !IsShowFilter
+    }">
+        <financial-transactions [TransactionFilter]="TransactionFilter"></financial-transactions>
+    </div>
+</div>

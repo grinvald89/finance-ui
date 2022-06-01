@@ -21,14 +21,24 @@
         *ngIf="Users.length > 0"
         class="filter-container"
     >
-        <users
-            (ChangeSelectedUsers)="onChangedSelectedUsers($event)"
-            [Users]="Users"
-        ></users>
+        <payers
+            (ChangeSelectedPayers)="onChangedSelectedUsers($event)"
+            [Payers]="Users"
+        ></payers>
     </div>
 
     <div class="filter-container">
-        <dates (ChangeSelectedPeriod)="onChangedSelectedPeriod($event)"></dates>
+        <period (ChangeSelectedPeriod)="onChangedSelectedPeriod($event)"></period>
+    </div>
+
+    <div
+        *ngIf="TransactionDirections.length > 0"
+        class="filter-container"
+    >
+        <transaction-directions
+            (ChangeSelectedTransactionDirections)="onChangedSelectedTransactionDirections($event)"
+            [Directions]="TransactionDirections"
+        ></transaction-directions>
     </div>
 
     <div
@@ -38,46 +48,17 @@
         <transaction-categories
             (ChangeSelectedTransactionCategories)="onChangedSelectedTransactionCategories($event)"
             [Categories]="TransactionCategories"
+            [Directions]="SelectedTransactionDirections"
         ></transaction-categories>
     </div>
 
     <div
-        *ngIf="TransactionCategoryOptions.length > 0"
+        *ngIf="TransactionTags.length > 0"
         class="filter-container"
     >
-        <transaction-category-options
-            (ChangeSelectedTransactionCategoryOptions)="onChangedSelectedTransactionCategoryOptions($event)"
-            [CategoryOptions]="TransactionCategoryOptions"
-        ></transaction-category-options>
-    </div>
-
-    <div
-        *ngIf="TransactionSubCategories.length > 0"
-        class="filter-container"
-    >
-        <transaction-subcategories
-            (ChangeSelectedTransactionSubCategories)="onChangedSelectedTransactionSubCategories($event)"
-            [SubCategories]="TransactionSubCategories"
-        ></transaction-subcategories>
-    </div>
-
-    <div
-        *ngIf="TransactionSubCategoryFirstOptions.length > 0"
-        class="filter-container"
-    >
-        <transaction-subcategory-first-options
-            (ChangeSelectedTransactionSubCategoryFirstOptions)="onChangedSelectedTransactionSubCategoryFirstOptions($event)"
-            [SubCategoryFirstOptions]="TransactionSubCategoryFirstOptions"
-        ></transaction-subcategory-first-options>
-    </div>
-
-    <div
-        *ngIf="TransactionSubCategorySecondOptions.length > 0"
-        class="filter-container"
-    >
-        <transaction-subcategory-second-options
-            (ChangeSelectedTransactionSubCategorySecondOptions)="onChangedSelectedTransactionSubCategorySecondOptions($event)"
-            [SubCategorySecondOptions]="TransactionSubCategorySecondOptions"
-        ></transaction-subcategory-second-options>
+        <transaction-tags
+            (ChangeSelectedTransactionTags)="onChangedSelectedTransactionTags($event)"
+            [Tags]="TransactionTags"
+        ></transaction-tags>
     </div>
 </div>

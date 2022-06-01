@@ -1,0 +1,25 @@
+<div
+    [formGroup]="Form"
+    class="form"
+>
+    <mat-form-field
+        appearance="fill"
+        class="form-field"
+    >
+        <mat-label>
+            Теги
+        </mat-label>
+        <mat-select
+            multiple
+            formControlName="tags"
+            [compareWith]="compareTags"
+        >
+            <mat-option
+                *ngFor="let tag of Tags"
+                [value]="tag"
+            >
+                {{ tag.Name }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>

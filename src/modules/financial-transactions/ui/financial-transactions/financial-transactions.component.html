@@ -1,0 +1,23 @@
+<!-- <transaction-table-header></transaction-table-header> -->
+
+<div
+    *ngFor="let group of TransactionGroups"
+    class="transaction-group"
+>
+
+    <div class="group-date">
+        <button mat-icon-button color="primary" class="group-date__add-btn" (click)="openTransactionEditor()">
+            <mat-icon>add_circle</mat-icon>
+        </button>
+    
+        <span class="group-date__text">
+            {{ group.date }}
+        </span>
+    </div>
+
+    <transaction-table-body
+        [Transactions]="group.transactions"
+        (OpenTransactionEditor)="openTransactionEditor($event)"
+        (CloneTransaction)="cloneTransaction($event)"
+    ></transaction-table-body>
+</div>

@@ -5,19 +5,15 @@ import * as _ from 'lodash';
 
 import {
     ITransactionCategory,
-    ITransactionCategoryOption,
+    ITransactionDirection,
     ITransactionStatus,
-    ITransactionSubCategory,
-    ITransactionSubCategoryFirstOption,
-    ITransactionSubCategorySecondOption,
+    ITransactionTag,
     ITransactionType,
     IUser,
     TransactionCategory,
-    TransactionCategoryOption,
+    TransactionDirection,
     TransactionStatus,
-    TransactionSubCategory,
-    TransactionSubCategoryFirstOption,
-    TransactionSubCategorySecondOption,
+    TransactionTag,
     TransactionType,
     User
 } from 'src/models';
@@ -27,6 +23,23 @@ import {
 })
 export class FinancialTransactionFilterRepository {
     constructor(private readonly http: HttpClient) { }
+
+    public getTransactionDirections(): Observable<TransactionDirection[]> {
+        const headers: HttpHeaders = new HttpHeaders({
+            'Content-Type': 'application/json'
+        });
+
+        return this.http.get<ITransactionDirection[]>(
+            'https://localhost:7062/api/transaction-directions',
+            {
+                headers
+            }
+        )
+            .pipe(
+                map((transactionDirections: ITransactionDirection[]): TransactionDirection[] =>
+                    _.map(transactionDirections, (item) => new TransactionDirection(item)))
+            );
+    }
 
     public getTransactionCategories(): Observable<TransactionCategory[]> {
         const headers: HttpHeaders = new HttpHeaders({
@@ -42,23 +55,6 @@ export class FinancialTransactionFilterRepository {
             .pipe(
                 map((transactionCategories: ITransactionCategory[]): TransactionCategory[] =>
                     _.map(transactionCategories, (item) => new TransactionCategory(item)))
-            );
-    }
-
-    public getTransactionCategoryOptions(): Observable<TransactionCategoryOption[]> {
-        const headers: HttpHeaders = new HttpHeaders({
-            'Content-Type': 'application/json'
-        });
-
-        return this.http.get<ITransactionCategoryOption[]>(
-            'https://localhost:7062/api/transaction-category-options',
-            {
-                headers
-            }
-        )
-            .pipe(
-                map((transactionCategoryOptions: ITransactionCategoryOption[]): TransactionCategoryOption[] =>
-                    _.map(transactionCategoryOptions, (item) => new TransactionCategoryOption(item)))
             );
     }
 
@@ -79,59 +75,6 @@ export class FinancialTransactionFilterRepository {
             );
     }
 
-    public getTransactionSubCategories(): Observable<TransactionSubCategory[]> {
-        const headers: HttpHeaders = new HttpHeaders({
-            'Content-Type': 'application/json'
-        });
-
-        return this.http.get<ITransactionSubCategory[]>(
-            'https://localhost:7062/api/transaction-sub-categories',
-            {
-                headers
-            }
-        )
-            .pipe(
-                map((transactionSubCategories: ITransactionSubCategory[]): TransactionSubCategory[] =>
-                    _.map(transactionSubCategories, (item) => new TransactionSubCategory(item)))
-            );
-    }
-
-    public getTransactionSubCategoryFirstOptions(): Observable<TransactionSubCategoryFirstOption[]> {
-        const headers: HttpHeaders = new HttpHeaders({
-            'Content-Type': 'application/json'
-        });
-
-        return this.http.get<ITransactionSubCategoryFirstOption[]>(
-            'https://localhost:7062/api/transaction-sub-category-first-options',
-            {
-                headers
-            }
-        )
-            .pipe(
-                map((transactionSubCategoryFirstOptions: ITransactionSubCategoryFirstOption[]): TransactionSubCategoryFirstOption[] =>
-                    _.map(transactionSubCategoryFirstOptions, (item) => new TransactionSubCategoryFirstOption(item)))
-            );
-    }
-
-    public getTransactionSubCategorySecondOptions(): Observable<TransactionSubCategorySecondOption[]> {
-        const headers: HttpHeaders = new HttpHeaders({
-            'Content-Type': 'application/json'
-        });
-
-        return this.http.get<ITransactionSubCategorySecondOption[]>(
-            'https://localhost:7062/api/transaction-sub-category-second-options',
-            {
-                headers
-            }
-        )
-            .pipe(
-                map((transactionSubCategorySecondOptions: ITransactionSubCategorySecondOption[]): TransactionSubCategorySecondOption[] =>
-                    _.map(transactionSubCategorySecondOptions, (item) => new TransactionSubCategorySecondOption(item)))
-            );
-    }
-
-    
-
     public getTransactionTypes(): Observable<TransactionType[]> {
         const headers: HttpHeaders = new HttpHeaders({
             'Content-Type': 'application/json'
@@ -146,6 +89,23 @@ export class FinancialTransactionFilterRepository {
             .pipe(
                 map((transactionTypes: ITransactionType[]): TransactionType[] =>
                     _.map(transactionTypes, (item) => new TransactionType(item)))
+            );
+    }
+
+    public getTransactionTags(): Observable<TransactionTag[]> {
+        const headers: HttpHeaders = new HttpHeaders({
+            'Content-Type': 'application/json'
+        });
+
+        return this.http.get<ITransactionTag[]>(
+            'https://localhost:7062/api/transaction-tags',
+            {
+                headers
+            }
+        )
+            .pipe(
+                map((transactionTags: ITransactionTag[]): TransactionTag[] =>
+                    _.map(transactionTags, (item) => new TransactionTag(item)))
             );
     }
 
@@ -164,6 +124,5 @@ export class FinancialTransactionFilterRepository {
                 map((users: IUser[]): User[] =>
                     _.map(users, (item) => new User(item)))
             );
-    }
-    
+    }    
 }

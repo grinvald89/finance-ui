@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import * as _ from 'lodash';
 
 import { AuthenticationFacade } from '../../core';
 
@@ -45,7 +46,11 @@ export class LoginComponent implements OnInit {
     }
 
     public ngOnInit(): void {
+        const token: string | null = localStorage.getItem('accessToken');
 
+        if (!_.isNil(token)) {
+            this.router.navigate(['/dashboard']);
+        }
     }
 
     public login(): void {
@@ -53,7 +58,7 @@ export class LoginComponent implements OnInit {
             .subscribe({
                 next: (accessToken: string): void => {
                     localStorage.setItem('accessToken', accessToken);
-                    this.router.navigate(['/financial-transactions']);
+                    this.router.navigate(['/dashboard']);
                 },
                 error: err => console.error(err.error)
             });

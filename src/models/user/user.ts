@@ -15,11 +15,15 @@ export class User {
 
     constructor(params?: IUser) {
         if (!_.isUndefined(params)) {
-            this.authorization = new UserAuthorization(params.authorization);
+            if (!_.isNil(params.authorization)) {
+                this.authorization = new UserAuthorization(params.authorization);
+            }
             this.creationDate = params.creationDate;
             this.fullName = new UserFullName(params.fullName);
             this.id = params.id;
-            this.roles = _.map(params.roles, (item: IUserRole): UserRole => new UserRole(item));
+            if (!_.isNil(params.roles)) {
+                this.roles = _.map(params.roles, (item: IUserRole): UserRole => new UserRole(item));
+            }
         }
     }
 

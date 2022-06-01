@@ -74,19 +74,21 @@
         </mat-select>
     </mat-form-field>
 
-    <mat-form-field appearance="fill" class="form__field">
-        <mat-label>
-            Категория
-        </mat-label>
-        <mat-select formControlName="category">
-            <mat-option
-                *ngFor="let category of Categories"
-                [value]="category"
-            >
-                {{ category.Name }}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
+    <ng-container *ngIf="Categories.length > 0">
+        <mat-form-field appearance="fill" class="form__field">
+            <mat-label>
+                Категория
+            </mat-label>
+            <mat-select formControlName="category">
+                <mat-option
+                    *ngFor="let category of Categories"
+                    [value]="category"
+                >
+                    {{ category.Name }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </ng-container>
 
     <mat-form-field appearance="fill" class="form__field">
         <mat-label>

@@ -204,11 +204,9 @@ export class TransactionEditorComponent implements OnInit {
 
         this.Form.valueChanges
             .subscribe((formValue: IFormValue): void => {
-                if (
-                    !_.isNil(this.formDirectionValue) &&
-                    !_.isNil(formValue.direction) &&
-                    this.formDirectionValue.Id !== formValue.direction.Id
-                ) {
+                const isDirectionFirstValue: boolean = _.isNil(this.formDirectionValue);
+                const isDirectionChanged: boolean = (!_.isNil(formValue.direction) && this.formDirectionValue?.Id !== formValue.direction.Id);
+                if (isDirectionFirstValue || isDirectionChanged) {
                     this.Categories = _.filter(this.allCategories, (item: TransactionCategory): boolean => item.DirectionId === formValue.direction.Id);
                 }
 

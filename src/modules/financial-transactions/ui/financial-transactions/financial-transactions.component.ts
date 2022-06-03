@@ -2,14 +2,20 @@ import { Component, ChangeDetectionStrategy, ChangeDetectorRef, Input } from '@a
 import { MatDialog } from '@angular/material/dialog';
 import * as moment from 'moment';
 import * as _ from 'lodash';
+import * as Swal from 'sweetalert2';
 
 import { FinancialTransactionsFacade } from '../../core';
 import { TransactionEditorComponent } from '../transaction-editor/transaction-editor.component';
 import { ITransactionFilter, Transaction } from 'src/models';
 
-interface TransactionGroup {
-    date: string,
-    transactions: Transaction[]
+interface ITransactionGroup {
+    date: string;
+    transactions: Transaction[];
+}
+
+interface IErrorAlert {
+    readonly title: string;
+    readonly text: string;
 }
 
 @Component({
@@ -31,7 +37,7 @@ export class FinancialTransactionsComponent {
         'comment'
     ];
 
-    private transactionGroups: TransactionGroup[] = [];
+    private transactionGroups: ITransactionGroup[] = [];
     private transactionFilter!: ITransactionFilter;
 
     constructor(
@@ -52,10 +58,10 @@ export class FinancialTransactionsComponent {
         }
     }
 
-    get TransactionGroups(): TransactionGroup[] {
+    get TransactionGroups(): ITransactionGroup[] {
         return this.transactionGroups;
     }
-    set TransactionGroups(value: TransactionGroup[]) {
+    set TransactionGroups(value: ITransactionGroup[]) {
         this.transactionGroups = value;
         this.changeDetector.detectChanges();
     }
@@ -79,10 +85,22 @@ export class FinancialTransactionsComponent {
 
                 if (_.isEmpty(transaction.Id)) {
                     this.financialTransactionsFacade.createTransaction(transaction)
-                        .subscribe((transaction: Transaction): void => this.updateTransactionInTable(transaction));
+                        .subscribe({
+                            next: (transaction: Transaction): void => this.updateTransactionInTable(transaction),
+                            error: (err: any): void => this.showError({
+                                title: 'Ошибка!',
+                                text: 'Не удалось создать транзакцию.'
+                            })
+                        });
                 } else {
                     this.financialTransactionsFacade.updateTransaction(transaction)
-                        .subscribe((transaction: Transaction): void => this.updateTransactionInTable(transaction));
+                        .subscribe({
+                            next: (transaction: Transaction): void => this.updateTransactionInTable(transaction),
+                            error: (err: any): void => this.showError({
+                                title: 'Ошибка!',
+                                text: 'Не удалось сохранить транзакцию.'
+                            })
+                        });
                 }
             });
     }
@@ -94,7 +112,7 @@ export class FinancialTransactionsComponent {
 
     private updateTransactionInTable(transaction: Transaction): void {
         let transactions: Transaction[] = [];
-        _.forEach(this.TransactionGroups, (item: TransactionGroup): void => {
+        _.forEach(this.TransactionGroups, (item: ITransactionGroup): void => {
             transactions = _.concat(transactions, item.transactions)
         });
 
@@ -125,7 +143,7 @@ export class FinancialTransactionsComponent {
             transactionGroups[date].push(item);
         });
 
-        const result: TransactionGroup[] = [];
+        const result: ITransactionGroup[] = [];
         for (const date in transactionGroups) {
             if (_.has(transactionGroups, date)) {
                 result.push({
@@ -136,5 +154,12 @@ export class FinancialTransactionsComponent {
         }
 
         this.TransactionGroups = result;
+    }
+
+    private showError(alert: IErrorAlert): void {
+        Swal.default.fire({
+            title: alert.title,
+            text: alert.text
+        });
     }
 }

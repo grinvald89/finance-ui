@@ -166,8 +166,14 @@ export class FinancialTransactionFilterComponent implements OnInit {
 
         this.facade.getUsers()
             .subscribe((users: User[]): void => {
-                this.Users = users;
-                localStorage.setItem('payers', JSON.stringify(users));
+                this.Users = _.filter(
+                    users,
+                    (user: User): boolean =>
+                        // Todo: Вынести roleId в константу приложения
+                        _.findIndex(user.Roles, role => role.Id === "c6b374d7-4cd5-4e44-8d38-352756aef638") !== -1
+                );
+
+                localStorage.setItem('payers', JSON.stringify(this.Users));
             });
     }
 

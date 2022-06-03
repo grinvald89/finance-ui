@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+import { CONFIG } from 'src/config/config';
+
 @Injectable({
     providedIn: 'root'
 })
@@ -14,7 +16,7 @@ export class AuthenticationRepository {
         });
 
         return this.http.post<string>(
-            'https://localhost:7062/api/authentication/login',
+            `${CONFIG.baseUrl}/api/authentication/login`,
             {
                 "UserName": username,
                 "Password": password

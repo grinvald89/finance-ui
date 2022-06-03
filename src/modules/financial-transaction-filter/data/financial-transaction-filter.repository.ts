@@ -17,6 +17,7 @@ import {
     TransactionType,
     User
 } from 'src/models';
+import { CONFIG } from 'src/config/config';
 
 @Injectable({
     providedIn: 'root'
@@ -30,7 +31,7 @@ export class FinancialTransactionFilterRepository {
         });
 
         return this.http.get<ITransactionDirection[]>(
-            'https://localhost:7062/api/transaction-directions',
+            `${CONFIG.baseUrl}/api/transaction-directions`,
             {
                 headers
             }
@@ -47,7 +48,7 @@ export class FinancialTransactionFilterRepository {
         });
 
         return this.http.get<ITransactionCategory[]>(
-            'https://localhost:7062/api/transaction-categories',
+            `${CONFIG.baseUrl}/api/transaction-categories`,
             {
                 headers
             }
@@ -64,7 +65,7 @@ export class FinancialTransactionFilterRepository {
         });
 
         return this.http.get<ITransactionType[]>(
-            'https://localhost:7062/api/transaction-statuses',
+            `${CONFIG.baseUrl}/api/transaction-statuses`,
             {
                 headers
             }
@@ -81,7 +82,7 @@ export class FinancialTransactionFilterRepository {
         });
 
         return this.http.get<ITransactionType[]>(
-            'https://localhost:7062/api/transaction-types',
+            `${CONFIG.baseUrl}/api/transaction-types`,
             {
                 headers
             }
@@ -98,7 +99,7 @@ export class FinancialTransactionFilterRepository {
         });
 
         return this.http.get<ITransactionTag[]>(
-            'https://localhost:7062/api/transaction-tags',
+            `${CONFIG.baseUrl}/api/transaction-tags`,
             {
                 headers
             }
@@ -115,7 +116,7 @@ export class FinancialTransactionFilterRepository {
         });
 
         return this.http.get<IUser[]>(
-            'https://localhost:7062/api/users',
+            `${CONFIG.baseUrl}/api/users`,
             {
                 headers
             }

@@ -5,6 +5,7 @@ import * as _ from 'lodash';
 
 import { ITransaction, Transaction } from 'src/models/transaction';
 import { ITransactionFilter, TransactionTag } from 'src/models';
+import { CONFIG } from 'src/config/config';
 
 @Injectable({
     providedIn: 'root'
@@ -19,7 +20,7 @@ export class FinancialTransactionsRepository {
         });
 
         return this.http.get<ITransaction[]>(
-            `https://localhost:7062/api/transactions?filter=${JSON.stringify(filter)}`,
+            `${CONFIG.baseUrl}/api/transactions?filter=${JSON.stringify(filter)}`,
             // {
             //     categoryIds: filter.categoryIds,
             //     directionIds: filter.directionIds,
@@ -45,7 +46,7 @@ export class FinancialTransactionsRepository {
         });
 
         return this.http.put<ITransaction>(
-            'https://localhost:7062/api/transactions',
+            `${CONFIG.baseUrl}/api/transactions`,
             {
                 "CategoryId": transaction.Category.Id,
                 "Comment": transaction.Comment,
@@ -73,7 +74,7 @@ export class FinancialTransactionsRepository {
         });
 
         return this.http.post<ITransaction>(
-            'https://localhost:7062/api/transactions',
+            `${CONFIG.baseUrl}/api/transactions`,
             {
                 "CategoryId": transaction.Category.Id,
                 "Comment": transaction.Comment,

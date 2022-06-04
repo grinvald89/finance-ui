@@ -8,6 +8,8 @@ $mobile-width: 800px;
 }
 
 .dashboard-container {
+    display: flex;
+    flex-direction: column;
     height: inherit;
 }
 
@@ -29,9 +31,17 @@ $mobile-width: 800px;
     }
 }
 
-.financial-filter-container,
+.financial-filter-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 80px;
+}
+
 .financial-transactions-container {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    height: inherit;
+    overflow: auto;
 }
 
 @media (max-width: $mobile-width) {

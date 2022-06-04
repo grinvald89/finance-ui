@@ -62,6 +62,6 @@ export class TransactionTagsComponent {
     }
 
     private setSelectedFormValues(): void {
-        this.Form.controls['tags'].setValue(this.Tags);
+        this.Form.controls['tags'].setValue([]);
     }
 }

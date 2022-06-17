@@ -49,11 +49,11 @@ const DISPLAYED_COLUMNS: string[] = [
 })
 export class FinancialTransactionsComponent {
     private isTransactionLoaded: boolean = false;
+    private pagination: IPagination = INIT_PAGINATION;
     private transactionGroups: ITransactionGroup[] = [];
     private transactionFilter!: ITransactionFilter;
 
     public displayedColumns: string[] = DISPLAYED_COLUMNS;
-    public pagination: IPagination = INIT_PAGINATION;
 
     constructor(
         private readonly changeDetector: ChangeDetectorRef,
@@ -69,6 +69,7 @@ export class FinancialTransactionsComponent {
         this.transactionFilter = value;
 
         if (!_.isEmpty(this.transactionFilter)) {
+            this.Pagination = INIT_PAGINATION;
             this.loadTransactionCount(value);
             this.loadTransactions(
                 value, {
@@ -83,6 +84,14 @@ export class FinancialTransactionsComponent {
     }
     set IsTransactionLoaded(value: boolean) {
         this.isTransactionLoaded = value;
+        this.changeDetector.detectChanges();
+    }
+
+    get Pagination(): IPagination {
+        return this.pagination;
+    }
+    set Pagination(value: IPagination) {
+        this.pagination = value;
         this.changeDetector.detectChanges();
     }
 
@@ -134,10 +143,14 @@ export class FinancialTransactionsComponent {
     }
 
     public onPageEvent(event: PageEvent) {
-        this.pagination.pageIndex = event.pageIndex;
-        this.pagination.pageSize = event.pageSize;
+        this.pagination = {
+            ...this.pagination,
+            pageIndex: event.pageIndex,
+            pageSize: event.pageSize
+        }
 
         if (!_.isEmpty(this.transactionFilter)) {
+            this.loadTransactionCount(this.transactionFilter);
             this.loadTransactions(
                 this.transactionFilter, {
                     count: this.pagination.pageSize,
@@ -149,7 +162,10 @@ export class FinancialTransactionsComponent {
     private loadTransactionCount(filter: ITransactionFilter): void {
         this.financialTransactionsFacade.getTransactionCount(filter)
             .subscribe((transactionCount: number): void => {
-                this.pagination.length = transactionCount;
+                this.Pagination = {
+                    ...this.pagination,
+                    length: transactionCount
+                };
             });
     }
 

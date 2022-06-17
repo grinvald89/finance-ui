@@ -4,7 +4,7 @@ import { map, Observable } from 'rxjs';
 import * as _ from 'lodash';
 
 import { ITransaction, Transaction } from 'src/models/transaction';
-import { ITransactionFilter, TransactionTag } from 'src/models';
+import { ITransactionFilter, ITransactionPagination, TransactionTag } from 'src/models';
 import { CONFIG } from 'src/config/config';
 
 @Injectable({
@@ -13,22 +13,32 @@ import { CONFIG } from 'src/config/config';
 export class FinancialTransactionsRepository {
     constructor(private readonly http: HttpClient) { }
 
-    public getTransactions(filter: ITransactionFilter): Observable<Transaction[]> {
+    public getTransactionCount(filter: ITransactionFilter): Observable<number> {
 
         const headers: HttpHeaders = new HttpHeaders({
             'Content-Type': 'application/json'
         });
 
+        const queryParams: string = `filter=${JSON.stringify(filter)}`;
+
+        return this.http.get<number>(
+            `${CONFIG.baseUrl}/api/transaction-count?${queryParams}`,
+            {
+                headers
+            }
+        );
+    }
+
+    public getTransactions(filter: ITransactionFilter, pagination: ITransactionPagination): Observable<Transaction[]> {
+
+        const headers: HttpHeaders = new HttpHeaders({
+            'Content-Type': 'application/json'
+        });
+
+        const queryParams: string = `filter=${JSON.stringify(filter)}&pagination=${JSON.stringify(pagination)}`;
+
         return this.http.get<ITransaction[]>(
-            `${CONFIG.baseUrl}/api/transactions?filter=${JSON.stringify(filter)}`,
-            // {
-            //     categoryIds: filter.categoryIds,
-            //     directionIds: filter.directionIds,
-            //     payerIds: filter.payerIds,
-            //     statusIds: filter.statusIds,
-            //     tagIds: filter.tagIds,
-            //     typeIds: filter.typeIds
-            // },
+            `${CONFIG.baseUrl}/api/transactions?${queryParams}`,
             {
                 headers
             }
@@ -45,7 +55,7 @@ export class FinancialTransactionsRepository {
             'Content-Type': 'application/json'
         });
 
-        return this.http.put<ITransaction>(
+        return this.http.post<ITransaction>(
             `${CONFIG.baseUrl}/api/transactions`,
             {
                 "CategoryId": transaction.Category.Id,

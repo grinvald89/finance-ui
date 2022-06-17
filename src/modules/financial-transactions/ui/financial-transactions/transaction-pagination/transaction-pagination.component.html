@@ -1,0 +1,10 @@
+<div class="transaction-pagination">
+    <mat-paginator
+        aria-label="Select page"
+        (page)="emitPageEvent($event)"
+        [length]="pagination.length"
+        [pageSize]="pagination.pageSize"
+        [pageSizeOptions]="pagination.pageSizeOptions"
+        [showFirstLastButtons]="true"
+    ></mat-paginator>
+</div>

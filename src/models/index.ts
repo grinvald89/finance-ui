@@ -7,3 +7,4 @@ export * from './transaction';
 export * from './user';
 export { IPeriod } from './period.interface';
 export { ITransactionFilter } from './transaction-filter.interface';
+export { ITransactionPagination } from './transaction-pagination.interface';

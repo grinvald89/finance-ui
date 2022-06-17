@@ -1,12 +1,14 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, Input, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { PageEvent } from '@angular/material/paginator';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import * as Swal from 'sweetalert2';
 
 import { FinancialTransactionsFacade } from '../../core';
 import { TransactionEditorComponent } from '../transaction-editor/transaction-editor.component';
-import { ITransactionFilter, Transaction } from 'src/models';
+import { ITransactionFilter, ITransactionPagination, Transaction } from 'src/models';
+import { IPagination } from './pagination.interface';
 
 interface ITransactionGroup {
     date: string;
@@ -17,6 +19,14 @@ interface IErrorAlert {
     readonly title: string;
     readonly text: string;
 }
+
+const INIT_PAGINATION: IPagination = {
+    length: 0,
+    loaded: false,
+    pageIndex: 0,
+    pageSize: 10,
+    pageSizeOptions: [5, 10, 25, 50, 100]
+};
 
 @Component({
     selector: 'financial-transactions',
@@ -40,11 +50,26 @@ export class FinancialTransactionsComponent {
     private transactionGroups: ITransactionGroup[] = [];
     private transactionFilter!: ITransactionFilter;
 
+    public pagination: IPagination = INIT_PAGINATION;
+
     constructor(
         private readonly changeDetector: ChangeDetectorRef,
         private readonly financialTransactionsFacade: FinancialTransactionsFacade,
         public dialog: MatDialog
     ) { }
+
+    public onPageEvent(event: PageEvent) {
+        this.pagination.pageIndex = event.pageIndex;
+        this.pagination.pageSize = event.pageSize;
+
+        if (!_.isEmpty(this.transactionFilter)) {
+            this.loadTransactions(
+                this.transactionFilter, {
+                    count: this.pagination.pageSize,
+                    offset: this.pagination.pageSize * (this.pagination.pageIndex)
+                });
+        }
+    }
 
     @Input('TransactionFilter')
     get TransactionFilter(): ITransactionFilter {
@@ -54,7 +79,12 @@ export class FinancialTransactionsComponent {
         this.transactionFilter = value;
 
         if (!_.isEmpty(this.transactionFilter)) {
-            this.loadTransactions(value);
+            this.loadTransactionCount(value);
+            this.loadTransactions(
+                value, {
+                    count: this.pagination.pageSize,
+                    offset: this.pagination.pageSize * (this.pagination.pageIndex)
+                });
         }
     }
 
@@ -64,11 +94,6 @@ export class FinancialTransactionsComponent {
     set TransactionGroups(value: ITransactionGroup[]) {
         this.transactionGroups = value;
         this.changeDetector.detectChanges();
-    }
-
-    public loadTransactions(filter: ITransactionFilter): void {
-        this.financialTransactionsFacade.getTransactions(filter)
-            .subscribe((transactions: Transaction[]): void => this.formTransactionGroups(transactions));
     }
 
     public openTransactionEditor(transaction?: Transaction): void {
@@ -108,6 +133,18 @@ export class FinancialTransactionsComponent {
     public cloneTransaction(transaction: Transaction): void {
         this.financialTransactionsFacade.createTransaction(transaction)
             .subscribe((transaction: Transaction): void => this.updateTransactionInTable(transaction));
+    }
+
+    private loadTransactionCount(filter: ITransactionFilter): void {
+        this.financialTransactionsFacade.getTransactionCount(filter)
+            .subscribe((transactionCount: number): void => {
+                this.pagination.length = transactionCount;
+            });
+    }
+
+    private loadTransactions(filter: ITransactionFilter, pagination: ITransactionPagination): void {
+        this.financialTransactionsFacade.getTransactions(filter, pagination)
+            .subscribe((transactions: Transaction[]): void => this.formTransactionGroups(transactions));
     }
 
     private updateTransactionInTable(transaction: Transaction): void {

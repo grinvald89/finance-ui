@@ -1,0 +1,30 @@
+.transaction-pagination {
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #3f51b5;
+
+    .mat-paginator-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 0 8px;
+        flex-wrap: wrap-reverse;
+        width: 100%;
+        color: white;
+        background: #3f51b5;
+    }
+    
+    .mat-paginator-icon {
+        fill: white;
+    }
+
+    .mat-paginator-page-size {
+        align-items: center;
+    }
+
+    .mat-paginator-page-size-select {
+        margin-top: 0px;
+    }
+}

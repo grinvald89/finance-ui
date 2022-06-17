@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-
 import { Observable } from 'rxjs';
-import { ITransactionFilter, Transaction } from 'src/models';
+
+import { ITransactionFilter, ITransactionPagination, Transaction } from 'src/models';
 import { FinancialTransactionsRepository } from '../data/financial-transactions.repository';
 
 @Injectable({
@@ -12,8 +12,12 @@ export class FinancialTransactionsFacade {
         private readonly financialTransactionsRepository: FinancialTransactionsRepository
     ) { }
 
-    public getTransactions(filter: ITransactionFilter): Observable<Transaction[]> {
-        return this.financialTransactionsRepository.getTransactions(filter);
+    public getTransactionCount(filter: ITransactionFilter): Observable<number> {
+        return this.financialTransactionsRepository.getTransactionCount(filter);
+    }
+
+    public getTransactions(filter: ITransactionFilter, pagination: ITransactionPagination): Observable<Transaction[]> {
+        return this.financialTransactionsRepository.getTransactions(filter, pagination);
     }
 
     public createTransaction(transaction: Transaction): Observable<Transaction> {

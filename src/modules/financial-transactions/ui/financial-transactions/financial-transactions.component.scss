@@ -1,7 +1,14 @@
 :host {
     box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: auto 70px;
+    height: inherit;
+    overflow: hidden;
+}
+
+.transaction-wrapper {
     overflow: auto;
-    padding: 0 12px;
 }
 
 .transaction-group {

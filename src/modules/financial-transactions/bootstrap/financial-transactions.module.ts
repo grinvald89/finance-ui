@@ -12,6 +12,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 import { FinancialTransactionsRoutingModule} from './financial-transactions-routing.module';
 import { PipesModule } from 'src/modules/pipes/bootstrap/pipes.module';
@@ -19,6 +20,7 @@ import { FinancialTransactionsComponent } from '../ui/financial-transactions/fin
 import { TransactionEditorComponent } from '../ui/transaction-editor/transaction-editor.component';
 import { TransactionTableHeaderComponent } from '../ui/transaction-table-header/transaction-table-header.component';
 import { TransactionTableBodyComponent } from '../ui/transaction-table-body/transaction-table-body.component';
+import { TransactionPaginationComponent } from '../ui/financial-transactions/transaction-pagination/transaction-pagination.component';
 
 @NgModule({
     imports: [
@@ -37,13 +39,15 @@ import { TransactionTableBodyComponent } from '../ui/transaction-table-body/tran
         MatDatepickerModule,
         MatSelectModule,
         MatTooltipModule,
+        MatPaginatorModule,
         PipesModule
     ],
     declarations: [
         FinancialTransactionsComponent,
         TransactionTableHeaderComponent,
         TransactionTableBodyComponent,
-        TransactionEditorComponent
+        TransactionEditorComponent,
+        TransactionPaginationComponent
     ],
     exports: [
         FinancialTransactionsComponent

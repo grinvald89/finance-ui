@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, Input, ViewEncapsulation } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import * as moment from 'moment';
@@ -28,6 +28,18 @@ const INIT_PAGINATION: IPagination = {
     pageSizeOptions: [5, 10, 25, 50, 100]
 };
 
+const DISPLAYED_COLUMNS: string[] = [
+    'date',
+    'summ',
+    'status',
+    'type',
+    'payer',
+    'direction',
+    'category',
+    'tags',
+    'comment'
+];
+
 @Component({
     selector: 'financial-transactions',
     templateUrl: './financial-transactions.component.html',
@@ -35,21 +47,10 @@ const INIT_PAGINATION: IPagination = {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FinancialTransactionsComponent {
-    displayedColumns: string[] = [
-        'date',
-        'summ',
-        'status',
-        'type',
-        'payer',
-        'direction',
-        'category',
-        'tags',
-        'comment'
-    ];
-
     private transactionGroups: ITransactionGroup[] = [];
     private transactionFilter!: ITransactionFilter;
 
+    public displayedColumns: string[] = DISPLAYED_COLUMNS;
     public pagination: IPagination = INIT_PAGINATION;
 
     constructor(
@@ -57,19 +58,6 @@ export class FinancialTransactionsComponent {
         private readonly financialTransactionsFacade: FinancialTransactionsFacade,
         public dialog: MatDialog
     ) { }
-
-    public onPageEvent(event: PageEvent) {
-        this.pagination.pageIndex = event.pageIndex;
-        this.pagination.pageSize = event.pageSize;
-
-        if (!_.isEmpty(this.transactionFilter)) {
-            this.loadTransactions(
-                this.transactionFilter, {
-                    count: this.pagination.pageSize,
-                    offset: this.pagination.pageSize * (this.pagination.pageIndex)
-                });
-        }
-    }
 
     @Input('TransactionFilter')
     get TransactionFilter(): ITransactionFilter {
@@ -135,6 +123,19 @@ export class FinancialTransactionsComponent {
             .subscribe((transaction: Transaction): void => this.updateTransactionInTable(transaction));
     }
 
+    public onPageEvent(event: PageEvent) {
+        this.pagination.pageIndex = event.pageIndex;
+        this.pagination.pageSize = event.pageSize;
+
+        if (!_.isEmpty(this.transactionFilter)) {
+            this.loadTransactions(
+                this.transactionFilter, {
+                    count: this.pagination.pageSize,
+                    offset: this.pagination.pageSize * (this.pagination.pageIndex)
+                });
+        }
+    }
+
     private loadTransactionCount(filter: ITransactionFilter): void {
         this.financialTransactionsFacade.getTransactionCount(filter)
             .subscribe((transactionCount: number): void => {
@@ -144,7 +145,13 @@ export class FinancialTransactionsComponent {
 
     private loadTransactions(filter: ITransactionFilter, pagination: ITransactionPagination): void {
         this.financialTransactionsFacade.getTransactions(filter, pagination)
-            .subscribe((transactions: Transaction[]): void => this.formTransactionGroups(transactions));
+            .subscribe({
+                next: (transactions: Transaction[]): void => this.formTransactionGroups(transactions),
+                error: (err: any): void => this.showError({
+                    text: 'Ошибка!',
+                    title: 'Не удалось загрузить список транзакций.'
+                }),
+            });
     }
 
     private updateTransactionInTable(transaction: Transaction): void {

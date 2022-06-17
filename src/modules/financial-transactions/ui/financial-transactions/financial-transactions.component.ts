@@ -4,6 +4,7 @@ import { PageEvent } from '@angular/material/paginator';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import * as Swal from 'sweetalert2';
+import { finalize } from 'rxjs';
 
 import { FinancialTransactionsFacade } from '../../core';
 import { TransactionEditorComponent } from '../transaction-editor/transaction-editor.component';
@@ -47,6 +48,7 @@ const DISPLAYED_COLUMNS: string[] = [
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FinancialTransactionsComponent {
+    private isTransactionLoaded: boolean = false;
     private transactionGroups: ITransactionGroup[] = [];
     private transactionFilter!: ITransactionFilter;
 
@@ -74,6 +76,14 @@ export class FinancialTransactionsComponent {
                     offset: this.pagination.pageSize * (this.pagination.pageIndex)
                 });
         }
+    }
+
+    get IsTransactionLoaded(): boolean {
+        return this.isTransactionLoaded;
+    }
+    set IsTransactionLoaded(value: boolean) {
+        this.isTransactionLoaded = value;
+        this.changeDetector.detectChanges();
     }
 
     get TransactionGroups(): ITransactionGroup[] {
@@ -144,7 +154,10 @@ export class FinancialTransactionsComponent {
     }
 
     private loadTransactions(filter: ITransactionFilter, pagination: ITransactionPagination): void {
+        this.IsTransactionLoaded = false;
+
         this.financialTransactionsFacade.getTransactions(filter, pagination)
+            .pipe(finalize((): boolean => this.IsTransactionLoaded = true))
             .subscribe({
                 next: (transactions: Transaction[]): void => this.formTransactionGroups(transactions),
                 error: (err: any): void => this.showError({

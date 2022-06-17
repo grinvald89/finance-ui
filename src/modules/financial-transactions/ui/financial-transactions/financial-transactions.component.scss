@@ -31,3 +31,15 @@
         text-align: center;
     }
 }
+
+.loader {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    &__text {
+        margin-top: 25px;
+        color: rgba(0,0,0,.6);
+    }
+}

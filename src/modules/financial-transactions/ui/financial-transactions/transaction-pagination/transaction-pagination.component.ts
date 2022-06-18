@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 
-import { IPagination } from '../pagination.interface';
+const PAGE_SIZE_OPTIONS: number[] = [5, 10, 25, 50, 100];
 
 @Component({
     selector: 'transaction-pagination',
@@ -11,21 +11,19 @@ import { IPagination } from '../pagination.interface';
     encapsulation: ViewEncapsulation.None
 })
 export class TransactionPaginationComponent {
-    private pagination!: IPagination;
+    @Input('length')
+    public length: number = 0;
 
-    @Input('pagination')
-    set Pagination(value: IPagination) {
-        this.pagination = value;
-        this.changeDetector.reattach();
-    }
-    get Pagination(): IPagination {
-        return this.pagination;
-    }
+    @Input('pageIndex')
+    public pageIndex: number = 0;
+
+    @Input('pageSize')
+    public pageSize: number = 0;
+
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
 
     @Output()
     private pageEvent: EventEmitter<PageEvent> = new EventEmitter<PageEvent>();
-
-    constructor(private changeDetector: ChangeDetectorRef) { }
 
     public emitPageEvent(event: PageEvent) {
         this.pageEvent.emit(event);

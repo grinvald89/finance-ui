@@ -2,9 +2,10 @@
     <mat-paginator
         aria-label="Select page"
         (page)="emitPageEvent($event)"
-        [length]="Pagination.length"
-        [pageSize]="Pagination.pageSize"
-        [pageSizeOptions]="Pagination.pageSizeOptions"
+        [length]="length"
+        [pageIndex]="pageIndex"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="pageSizeOptions"
         [showFirstLastButtons]="true"
     ></mat-paginator>
 </div>

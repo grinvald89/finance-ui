@@ -26,7 +26,9 @@
 
     <transaction-pagination
         (pageEvent)="onPageEvent($event)"
-        [pagination]="Pagination"
+        [length]="Pagination.length"
+        [pageIndex]="Pagination.pageIndex"
+        [pageSize]="Pagination.pageSize"
     ></transaction-pagination>
 </ng-container>
 

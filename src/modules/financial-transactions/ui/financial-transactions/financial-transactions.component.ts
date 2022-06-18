@@ -1,10 +1,10 @@
 import { Component, ChangeDetectionStrategy, ChangeDetectorRef, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
+import { finalize } from 'rxjs';
+import * as Swal from 'sweetalert2';
 import * as moment from 'moment';
 import * as _ from 'lodash';
-import * as Swal from 'sweetalert2';
-import { finalize } from 'rxjs';
 
 import { FinancialTransactionsFacade } from '../../core';
 import { TransactionEditorComponent } from '../transaction-editor/transaction-editor.component';
@@ -143,14 +143,19 @@ export class FinancialTransactionsComponent {
     }
 
     public onPageEvent(event: PageEvent) {
-        this.pagination = {
+        let pageIndex: number = event.pageIndex;
+
+        if (this.pagination.pageSize !== event.pageSize) {
+            pageIndex = INIT_PAGINATION.pageIndex;
+        }
+
+        this.Pagination = {
             ...this.pagination,
-            pageIndex: event.pageIndex,
+            pageIndex: pageIndex,
             pageSize: event.pageSize
         }
 
         if (!_.isEmpty(this.transactionFilter)) {
-            this.loadTransactionCount(this.transactionFilter);
             this.loadTransactions(
                 this.transactionFilter, {
                     count: this.pagination.pageSize,

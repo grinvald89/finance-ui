@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { CONFIG } from 'src/config/config';
+import { ITransactionFilter, ITransactionTotalAmount } from 'src/models';
 
 @Injectable({
     providedIn: 'root'
@@ -21,6 +22,21 @@ export class DashboardRepository {
                 "UserName": username,
                 "Password": password
             },
+            {
+                headers
+            }
+        );
+    }
+
+    public getTransactionTotalAmount(filter: ITransactionFilter): Observable<ITransactionTotalAmount> {
+        const headers: HttpHeaders = new HttpHeaders({
+            'Content-Type': 'application/json'
+        });
+
+        const queryParams: string = `filter=${JSON.stringify(filter)}`;
+
+        return this.http.get<ITransactionTotalAmount>(
+            `${CONFIG.baseUrl}/api/transaction-total-amount?${queryParams}`,
             {
                 headers
             }

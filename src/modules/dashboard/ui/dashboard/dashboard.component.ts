@@ -1,6 +1,7 @@
-import { Component, ChangeDetectionStrategy, AfterViewInit, HostListener, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
-import { ITransactionFilter } from 'src/models';
+import { ITransactionFilter, ITransactionTotalAmount } from 'src/models';
+import { DashboardFacade } from '../../core';
 
 @Component({
     selector: 'dashboard',
@@ -11,6 +12,17 @@ import { ITransactionFilter } from 'src/models';
 export class DashboardComponent {
     private transactionFilter!: ITransactionFilter;
     private isShowFilter: boolean = false;
+    private totalAmountLoaded: boolean = false;
+    private totalAmount: ITransactionTotalAmount = {
+        balance: 0,
+        expense: 0,
+        refill: 0
+    };
+
+    constructor(
+        private readonly changeDetector: ChangeDetectorRef,
+        private readonly dashboardFacade: DashboardFacade
+    ) { }
 
     get TransactionFilter(): ITransactionFilter {
         return this.transactionFilter;
@@ -26,7 +38,22 @@ export class DashboardComponent {
         this.isShowFilter = value;        
     }
 
+    get TotalAmount(): ITransactionTotalAmount {
+        return this.totalAmount;
+    }
+
+    get TotalAmountLoaded(): boolean {
+        return this.totalAmountLoaded;
+    }
+
     public onUpdatedTransactionFilter(filter: ITransactionFilter): void {
         this.TransactionFilter = filter;
+        this.totalAmountLoaded = false;
+        this.dashboardFacade.getTransactionTotalAmount(filter)
+            .subscribe((totalAmount: ITransactionTotalAmount) => {
+                this.totalAmount = totalAmount;
+                this.totalAmountLoaded = true;
+                this.changeDetector.detectChanges();
+            });
     }
 }

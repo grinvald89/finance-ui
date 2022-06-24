@@ -14,12 +14,45 @@
         </mat-icon>
     </div>
 
-    <div [ngClass]="{
-        'financial-filter-container': true,
-        'visible': IsShowFilter
-    }">
-        <financial-transaction-filter (UpdateTransactionFilter)="onUpdatedTransactionFilter($event)"></financial-transaction-filter>
-    </div>
+    <mat-tab-group mat-align-tabs="start">
+        <mat-tab label="Настройка фильтра">
+            <div [ngClass]="{
+                'financial-filter-container': true,
+                'visible': IsShowFilter
+            }">
+                <financial-transaction-filter (UpdateTransactionFilter)="onUpdatedTransactionFilter($event)"></financial-transaction-filter>
+            </div>
+        </mat-tab>
+        <mat-tab label="Сумма по выбранным операциям">
+            <div class="transactions-total-amount">
+                <ng-container *ngIf="TotalAmountLoaded">
+                    <div class="transactions-total-amount-section">
+                        <div class="transactions-total-amount-wrapper">
+                            <span class="transactions-total-amount-label">Приход</span>
+                            <span class="transactions-total-amount-value">{{ TotalAmount.refill | cost }}</span>
+                        </div>
+                    </div>
+                    <div class="transactions-total-amount-section">
+                        <div class="transactions-total-amount-wrapper">
+                            <span class="transactions-total-amount-label">Расход</span>
+                            <span class="transactions-total-amount-value">{{ TotalAmount.expense | cost }}</span>
+                        </div>
+                    </div>
+                    <div class="transactions-total-amount-section">
+                        <div class="transactions-total-amount-wrapper">
+                            <span class="transactions-total-amount-label">Баланс</span>
+                            <span class="transactions-total-amount-value">{{ TotalAmount.balance | cost }}</span>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="!TotalAmountLoaded">
+                    <span class="transactions-total-amount-loader">
+                        загрузка расчета по выбранным операциям...
+                    </span>
+                </ng-container>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
 
     <div [ngClass]="{
         'financial-transactions-container': true,

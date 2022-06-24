@@ -44,6 +44,47 @@ $mobile-width: 800px;
     overflow: auto;
 }
 
+.transactions-total-amount {
+    background: #3f51b5;
+    color: #ffffff;
+    display: flex;
+    height: 80px;
+
+    &-section {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        height: inherit;
+        justify-content: center;
+    }
+
+    &-wrapper {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+    }
+
+    &-label {
+        border-bottom: 1px solid #ffffff;
+        margin-bottom: 8px;
+        padding-bottom: 8px;
+        text-align: center;
+        width: 100%;
+    }
+
+    &-value {
+
+    }
+
+    &-loader {
+        align-items: center;
+        display: flex;
+        flex-grow: 1;
+        justify-content: center;
+    }
+}
+
 @media (max-width: $mobile-width) {
     .financial-filter-switcher {
         display: flex;
